@@ -60,7 +60,7 @@ Thirteenth and final task in the MVP phase (`ROADMAP.md`). Follows error handlin
   * Code reviewed and merged to `main`
   * Tests passing in CI/CD
   * Docs up to date
-  * Config template included (`config.example.toml`)
+  * Env templates included (`.env.onprem.example`, `.env.saas.example`)
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/UI_GUIDE.md`, implement task 0013.
@@ -97,14 +97,12 @@ Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/UI_GUIDE.md`, im
    * Describe dashboard buttons and their effects
    * Explain stats metrics (cancellation rate, busiest hours)
 4. Create `docs/DEPLOY.md`:
-   * Prerequisites: Rust, SQLite, environment variables
+   * Prerequisites: Docker/Compose (recommended), or Rust + DB + environment variables
    * Steps:
-     1. Clone repo
-     2. Copy `config.example.toml` to `config.toml`
-     3. Edit config (token, admin IDs, DB path)
-     4. Run `cargo build --release`
-     5. Run `./target/release/your_bot_name`
-   * Environment variables: `TELEGRAM_BOT_TOKEN`, `DATABASE_URL`
+     1. Copy `.env.onprem.example` or `.env.saas.example` to `.env`
+     2. Edit `.env` (token(s), admin IDs, DB URL, mode)
+     3. Run via `docker compose up -d --build` (or build native)
+   * Environment variables: see `docs/SETUP.md`
 5. Update `README.md`:
    * Project title and description
    * Features (appointment booking, reminders, admin panel)

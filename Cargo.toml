@@ -1,0 +1,10 @@
+[package]
+name = "nailbot"
+version = "0.1.0"
+edition = "2021"
+
+# Note: dependencies will be added as the bot is implemented (teloxide, tokio, etc.).
+
+[[bin]]
+name = "nailbot"
+path = "src/main.rs"

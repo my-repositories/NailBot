@@ -10,8 +10,12 @@
 
 ## Required Data
 
-* `CHANNEL_ID` from config (`src/config.rs`).
+* `CHANNEL_ID` from configuration (env/config layer).
 * `user_id` from message context.
+
+## Multi-tenant Notes (SaaS)
+
+If subscription checks are tenant-specific, store `CHANNEL_ID`/`CHANNEL_LINK` per tenant and resolve them by `client_id` before calling Telegram APIs.
 
 ## Functions
 

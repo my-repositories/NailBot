@@ -4,9 +4,9 @@ This guide is for staff members who manage appointments and monitor the system.
 
 ## Accessing the Admin Panel
 1. Send `/admin` to the bot.
-2. If you’re an authorized admin (listed in `config.toml`), you’ll see the dashboard.
+2. If you’re an authorized admin (configured via `ADMIN_IDS`), you’ll see the dashboard.
 
-> **Note:** Only users listed in `config.toml` as `ADMIN_IDS` can access this panel.
+> **Note:** Only users listed in `ADMIN_IDS` can access this panel. In SaaS mode, this is typically configured **per tenant**.
 
 ## Dashboard Overview
 The admin dashboard shows:
@@ -58,7 +58,7 @@ Tap **«📈 Weekly Overview»** to see:
 
 ## Troubleshooting
 **Issue: I can’t access the admin panel.**  
-Check that your Telegram ID is listed in `ADMIN_IDS` in the config file.
+Check that your Telegram ID is listed in `ADMIN_IDS` (env/config). In SaaS mode, confirm you’re set as an admin for the correct tenant (`client_id`).
 
 **Issue: Stats look incorrect.**  
 Verify the DB is up to date and the bot has read permissions.

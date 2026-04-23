@@ -1,0 +1,55 @@
+name: nailbot
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      MODE: ${MODE:-onprem}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TZ: ${TZ:-UTC}
+      # Convention: default SQLite location inside the container
+      # Users can override via DATABASE_URL in .env
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///app/data/bot.db}
+      # On-prem variables (ignored in SaaS mode if unused by the app)
+      BOT_TOKEN: ${BOT_TOKEN:-}
+      ADMIN_IDS: ${ADMIN_IDS:-}
+      CHANNEL_ID: ${CHANNEL_ID:-}
+      CHANNEL_LINK: ${CHANNEL_LINK:-}
+      LICENSE_KEY: ${LICENSE_KEY:-}
+      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-}
+      INSTANCE_ID: ${INSTANCE_ID:-}
+      # SaaS variables (ignored in on-prem mode if unused by the app)
+      SAAS_MASTER_BOT_TOKEN: ${SAAS_MASTER_BOT_TOKEN:-}
+      SAAS_TENANT_REGISTRY: ${SAAS_TENANT_REGISTRY:-}
+      BILLING_PROVIDER: ${BILLING_PROVIDER:-none}
+      BILLING_WEBHOOK_SECRET: ${BILLING_WEBHOOK_SECRET:-}
+    volumes:
+      - app_data:/app/data
+    # In SaaS mode with Postgres, start with:
+    #   docker compose --profile postgres up -d
+    # and ensure your app retries DB connections during startup.
+
+  db:
+    image: postgres:16
+    profiles: ["postgres"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nailbot}
+      POSTGRES_USER: ${POSTGRES_USER:-nailbot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nailbot}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "5432:5432"
+
+volumes:
+  app_data:
+  pg_data:

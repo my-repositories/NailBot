@@ -1,145 +1,127 @@
-# Deployment Guide: Appointment Booking Bot
+# Deployment Guide (Universal Docker Workflow)
 
+This repository supports a **hybrid distribution model**:
 
-Follow these steps to deploy the bot in production.
+- **SaaS (Multi-tenant)**: you operate one hosted platform instance.
+- **On‑Prem (Single-tenant)**: a customer runs one instance, typically with SQLite or their own Postgres, and must provide a valid license key.
+
+The deployment workflow below uses **Docker + Compose** so both distributions share the same runtime story.
 
 ## Prerequisites
-* **Rust** (1.70+) — for building the application.
-* **Database** — choose one:
-  * **PostgreSQL 12+** (recommended for production).
-  * **SQLite 3.30+** (simpler setup, suitable for small scale).
-* **Telegram Bot Token** — get from @BotFather.
-* **Admin Telegram IDs** — for access control (at least one admin).
-* **System User** — create a dedicated user for the bot (e.g., `botuser`).
 
-## Step 1: Clone the Repository
+- Docker Engine + Docker Compose v2
+- Telegram bot token(s)
+- A database:
+  - SQLite (on‑prem friendly; mounted volume)
+  - PostgreSQL (recommended for SaaS production)
+
+## Container Images
+
+- `Dockerfile` builds a single executable container.
+- `compose.yaml` runs the bot and (optionally) Postgres.
+
+## Environment Files
+
+Use one of the provided templates:
+
+- `.env.onprem.example` → copy to `.env` for single-tenant installs
+- `.env.saas.example` → copy to `.env` for hosted multi-tenant installs
+
+See `docs/SETUP.md` for the env variable taxonomy (Global vs SaaS vs On‑Prem).
+
+## On‑Premise Deployment (Single-tenant)
+
+1. Copy env template:
+
 ```bash
-git clone https://github.com/salon/appointment-bot.git
-cd appointment-bot
+cp .env.onprem.example .env
 ```
 
-## Step 2: Configure the Bot
-1. Copy the example config:
+2. Edit `.env` and set at least:
+
+- `MODE=onprem`
+- `BOT_TOKEN=...`
+- `ADMIN_IDS=...`
+- `DATABASE_URL=sqlite:///app/data/bot.db`
+- `LICENSE_KEY=...`
+
+3. Start:
+
 ```bash
-cp config.example.toml config.toml
-```
-2. Edit `config.toml`:
-```toml
-telegram_bot_token = "1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
-database_url = "sqlite:///app/data/bot.db"
-# Or for PostgreSQL:
-# database_url = "postgres://username:password@localhost/appointments"
-admin_ids = [123456789, 987654321]
-timezone = "Europe/Moscow"
-log_level = "info"
+docker compose --env-file .env up -d --build
 ```
 
-## Step 3: Set Environment Variables (Optional)
-You can override config values with environment variables:
+4. Verify:
+
+- Send `/start` to the bot.
+- Check logs:
+
 ```bash
-export TELEGRAM_BOT_TOKEN="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
-export DATABASE_URL="sqlite:///app/data/bot.db"
+docker compose logs -f app
 ```
 
-## Step 4: Build the Application
+## SaaS Deployment (Multi-tenant)
+
+SaaS mode requires a tenant registry (DB-backed, file-backed, or env-backed) and may require Postgres.
+
+1. Copy env template:
+
 ```bash
-cargo build --release
+cp .env.saas.example .env
 ```
 
-## Step 5: Run the Bot
+2. Edit `.env`:
 
-### Option A: Manual Run
+- `MODE=saas`
+- `DATABASE_URL=postgres://nailbot:nailbot@db:5432/nailbot`
+- `SAAS_TENANT_REGISTRY=...`
+- Optional billing variables if enabled
+
+3. Start (includes Postgres service):
+
 ```bash
-./target/release/appointment_bot
+docker compose --env-file .env --profile postgres up -d --build
 ```
 
-### Option B: Using systemd (Recommended for Production)
-1. Create a systemd service file:
-```ini
-# File: /etc/systemd/system/appointment-bot.service
-[Unit]
-Description=Appointment Booking Bot
-After=network.target
+## License Key Verification (On‑Prem Concept)
 
-[Service]
-Type=simple
-User=botuser
-WorkingDirectory=/opt/appointment-bot
-ExecStart=/opt/appointment-bot/target/release/appointment_bot
-Restart=always
-RestartSec=10
+On‑prem deployments should include a license check to reduce unauthorized redistribution. The recommended approach is **defense-in-depth**:
 
-[Install]
-WantedBy=multi-user.target
-```
-2. Enable and start the service:
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable appointment-bot.service
-sudo systemctl start appointment-bot.service
-```
-3. Check the status:
-```bash
-sudo systemctl status appointment-bot.service
-```
+### Verification points
 
-## Step 6: Verify Operation
-1. Send `/start` to your bot in Telegram.
-2. Check logs for startup messages:
-```log
-INFO bot started, listening for updates
-INFO admin panel ready for IDs: [123456789]
-```
-3. Test booking flow: `/start` → book an appointment → check DB.
-4. Verify admin notifications: book an appointment and check if admins receive a notification.
+- **Startup**: fail fast if the license is missing/invalid.
+- **Periodic re-check**: e.g., every 24 hours (with backoff if the license server is down).
+- **Feature gating** (optional): allow read-only features when license is expired, but block booking/admin actions.
 
-## Maintenance
-* Monitor logs: `journalctl -u appointment-bot -f` (if using systemd).
-* Update the bot:
-  1. Pull new code: `git pull`.
-  2. Rebuild: `cargo build --release`.
-  3. Restart the service: `sudo systemctl restart appointment-bot.service`.
-* Backup DB regularly:
-  * For SQLite: copy `bot.db` file.
-  * For PostgreSQL: use `pg_dump`.
+### Verification models
+
+- **Offline** (recommended for air‑gapped customers):
+  - License is a signed token (e.g., Ed25519) containing `customer_id`, `expires_at`, and optional `fingerprint`.
+  - App verifies signature using an embedded public key; no network needed.
+- **Online**:
+  - App calls `LICENSE_SERVER_URL` with `LICENSE_KEY` and instance fingerprint; caches the result with TTL.
+
+### Instance fingerprinting (optional)
+
+If you choose to bind a license to an installation, fingerprint from stable inputs such as:
+
+- customer-provided `INSTANCE_ID`
+- (optional) machine identifiers (be cautious: may break container portability)
+
+### Security notes
+
+- Assume the customer can patch binaries (on‑prem threat model). Licensing reduces casual redistribution; it does not prevent a determined reverse engineer.
+- Never log full tokens/keys. Redact or hash.
+
+## Operational Notes
+
+- **SQLite**: run a single app instance (single writer). For multi-worker scale, use Postgres.
+- **Backups**:
+  - SQLite: back up the DB file volume.
+  - Postgres: use `pg_dump` or physical backups.
 
 ## Troubleshooting
 
-**Bot won’t start:**
-* Check `config.toml` syntax.
-* Verify DB URL and permissions.
-* Ensure the Telegram token is correct.
-* Confirm the bot has read/write access to the DB file/directory.
-
-**Appointments not saving:**
-* Confirm DB user has write permissions.
-* Check disk space.
-* Verify the bot process has the correct working directory.
-
-**No admin notifications:**
-* Verify `ADMIN_IDS` are correct Telegram IDs.
-* Test sending a message to each admin ID manually.
-* Check bot logs for error messages.
-
-**High memory usage:**
-* Monitor with `top` or `htop`.
-* Consider using PostgreSQL instead of SQLite for large datasets.
-* Review the bot’s logging level (`log_level` in config).
-
-**Slow response times:**
-* Optimize DB indexes.
-* Increase system resources (CPU/RAM).
-* Check for long‑running queries.
-
-## Security Best Practices
-* Never expose the Telegram bot token in public repositories.
-* Use a dedicated system user (`botuser`) with minimal permissions.
-* Keep Rust and system packages up to date.
-* Restrict access to the config file (`chmod 600 config.toml`).
-* Regularly rotate the Telegram bot token if compromised.
-
-## Contact
-For deployment issues, contact the ops team:
-* Email: ops@salon.com
-* Telegram: @ops_support_bot
-```
+- **Bot won’t start**: verify env vars are set; inspect `docker compose logs -f app`.
+- **Database errors**: check `DATABASE_URL`, file permissions (SQLite), or DB connectivity (Postgres).
+- **No admin access**: confirm `ADMIN_IDS` format (comma-separated integers).
