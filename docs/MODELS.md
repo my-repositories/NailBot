@@ -1,5 +1,10 @@
 # Data Models Guide
 
+Hybrid requirement:
+
+- **SaaS (multi-tenant)**: core tables and structs include `client_id` and enforce tenant scoping.
+- **On‑Prem (single-tenant)**: still keep `client_id` in the schema/structs (constant `1`) to avoid maintaining “two schemas”.
+
 ## Rust Structs
 
 ### `User`
@@ -8,6 +13,7 @@
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct User {
     pub id: Option<i64>,
+    pub client_id: i64,
     pub telegram_id: i64,
     pub name: Option<String>,
     pub phone: Option<String>,
@@ -21,6 +27,7 @@ pub struct User {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Appointment {
     pub id: Option<i64>,
+    pub client_id: i64,
     pub user_id: i64,
     pub date: String, // YYYY-MM-DD
     pub time: String, // HH:MM
@@ -35,6 +42,7 @@ pub struct Appointment {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct TimeSlot {
     pub id: Option<i64>,
+    pub client_id: i64,
     pub date: String, // YYYY-MM-DD
     pub time: String, // HH:MM
     pub is_available: bool,
@@ -51,4 +59,4 @@ pub struct TimeSlot {
 
 ## AI Prompts
 
-> Define `User` struct in `src/database/models.rs`. Include fields: id, telegram_id, name, phone, created_at. Derive Debug, Clone, Serialize, Deserialize. Add documentation comments.
+> Define `User` struct in `src/database/models.rs`. Include fields: id, client_id, telegram_id, name, phone, created_at. Derive Debug, Clone, Serialize, Deserialize.

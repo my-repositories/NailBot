@@ -83,6 +83,11 @@ cp .env.saas.example .env
 docker compose --env-file .env --profile postgres up -d --build
 ```
 
+## Automated deployment alignment (Tasks)
+
+- **SaaS CI/CD**: see `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` (SaaS-only).
+- **On‑Prem installer**: see `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` (On‑Prem only).
+
 ## License Key Verification (On‑Prem Concept)
 
 On‑prem deployments should include a license check to reduce unauthorized redistribution. The recommended approach is **defense-in-depth**:
@@ -112,6 +117,10 @@ If you choose to bind a license to an installation, fingerprint from stable inpu
 
 - Assume the customer can patch binaries (on‑prem threat model). Licensing reduces casual redistribution; it does not prevent a determined reverse engineer.
 - Never log full tokens/keys. Redact or hash.
+
+## Tenant isolation note (SaaS)
+
+SaaS deployments must ensure **every request and background job** is executed with a resolved `client_id` and uses tenant-scoped queries. See `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md`.
 
 ## Operational Notes
 

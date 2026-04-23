@@ -24,7 +24,7 @@ Ninth task in the MVP phase (`ROADMAP.md`). Follows appointment confirmation. Re
   * `src/handlers/user.rs` (extend with cancel/reschedule handlers)
   * `src/keyboards/reminder.rs` (new — reminder keyboard)
   * `src/keyboards/mod.rs` (update to include reminder module)
-* Documentation: `docs/REMINDERS.md`, `docs/BUSINESS_RULES.md`, `docs/ARCHITECTURE.md`
+* Documentation: `docs/REMINDERS.md`, `docs/BUSINESS_RULES.md`, `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`
 * Libraries: `teloxide`, `tokio`, `chrono`, `tokio‑cron‑scheduler` (or `tokio::time` for basic scheduling)
 * Key considerations:
   * Use UTC for all datetime comparisons
@@ -32,6 +32,8 @@ Ninth task in the MVP phase (`ROADMAP.md`). Follows appointment confirmation. Re
   * Handle timezone conversion: bot runs in UTC+3, but user times are stored in local time
   * Rate‑limit messages to avoid spamming
   * Ensure callback handlers are idempotent (safe to retry)
+  * Tenant isolation (SaaS): reminder scans and send operations must be scoped to `client_id` and use the correct tenant bot token
+  * SaaS scaling: if multiple workers run, use a DB-coordinated claim model (see `docs/REMINDERS.md`)
 
 ## Acceptance Criteria
 * Reminders are sent:

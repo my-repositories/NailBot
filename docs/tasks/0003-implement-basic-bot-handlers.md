@@ -12,6 +12,9 @@ Third task in the MVP phase (`ROADMAP.md`). Follows the database setup. Enables 
 * [ ] Implement a handler for the `/help` command in `src/handlers/user.rs`.
 * [ ] Display the main menu with buttons: «Book Appointment», «My Appointments», «Prices».
 * [ ] Use the modular keyboard system (`src/keyboards/`).
+* [ ] Hybrid routing expectations:
+  * [ ] SaaS: handler execution has access to a resolved `client_id`
+  * [ ] On‑Prem: `client_id` is constant (e.g., `1`) and still threaded through for consistency
 
 
 ## Technical Details
@@ -25,6 +28,7 @@ Third task in the MVP phase (`ROADMAP.md`). Follows the database setup. Enables 
   * The main menu should be shown both on `/start` and as a fallback option
   * Keyboard should be persistent (not one‑time)
   * Use emoji for visual clarity per `docs/UI_GUIDE.md`
+  * In SaaS mode, never show cross-tenant or platform-admin actions in a tenant bot menu (those are SaaS-only)
 
 ## Acceptance Criteria
 * On `/start`:

@@ -41,6 +41,7 @@ Fifth task in the MVP phase (`ROADMAP.md`). Follows FSM implementation. Enables 
   * logs the selection
 * «Back to Menu» returns user to main menu and resets FSM state to `Idle`
 * Keyboard updates correctly when navigating between months
+* SaaS tenant isolation: callbacks cannot be used to drive state for a different tenant (session keyed by `client_id`)
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md`, `docs/UI_GUIDE.md` and `docs/FSM_GUIDE.md`, implement task 0005.

@@ -27,6 +27,7 @@ Tenth task in the MVP phase (`ROADMAP.md`). Follows reminder implementation. Pro
 * Libraries: `teloxide`, `rusqlite`, `chrono`
 * Key considerations:
   * Query DB by `user_id` and sort by date (upcoming first)
+  * Tenant isolation (SaaS): all queries are scoped to `client_id`; callbacks must verify appointment belongs to the current tenant
   * Limit displayed appointments to last 3 months
   * Handle timezone conversion: display times in user’s local time
   * Ensure cancellation updates both appointment status and reminder schedule
@@ -60,6 +61,7 @@ Tenth task in the MVP phase (`ROADMAP.md`). Follows reminder implementation. Pro
   * Cancels any pending reminders for this appointment
   * Sends confirmation: «✅ Appointment on {date} at {time} has been cancelled.»
   * Refreshes the appointments list
+* SaaS tenant isolation: user in tenant A cannot list/cancel/reschedule appointments belonging to tenant B (even if they guess IDs)
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/UI_GUIDE.md`, implement task 0010.

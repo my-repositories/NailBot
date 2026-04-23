@@ -1,5 +1,10 @@
 # Logging Guide
 
+Hybrid requirement:
+
+- **SaaS (multi-tenant)**: include `client_id` (and `mode=saas`) in logs for every request and background job.
+- **On‑Prem (single-tenant)**: include `mode=onprem`; `client_id` may be constant (e.g., `1`) for consistency.
+
 ## Levels
 
 * `TRACE` — Detailed flow (e.g., FSM state change).
@@ -11,7 +16,7 @@
 ## Format
 
 * Use structured logging (`tracing`).
-* Include context: `user_id`, `appointment_id`, `state`.
+* Include context: `mode`, `client_id`, `user_id`, `appointment_id`, `state`.
 * Timestamp in UTC.
 
 ## Examples
@@ -48,4 +53,4 @@
 
 > Add logging to `handle_appointment` function. Log at `INFO`: «User {user_id} started booking». Log at `DEBUG`: «Selected date: {date}, time: {time}». Use `tracing::info!` and `tracing::debug!`.
 
-> Implement error logging in `schedule_reminder`. On failure, log `ERROR`: «Failed to schedule reminder for appointment {id}: {error}». Include `user_id` in context.
+> Implement error logging in `schedule_reminder`. On failure, log `ERROR`: «Failed to schedule reminder for appointment {id}: {error}». Include `user_id` and `client_id` (SaaS) in context.

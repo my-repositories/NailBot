@@ -23,7 +23,7 @@ Twelfth task in the MVP phase (`ROADMAP.md`). Follows admin panel implementation
   * `src/utils/retry.rs` (new — retry policy)
   * `src/handlers/mod.rs` (extend error handling)
   * `src/main.rs` (global error middleware)
-* Documentation: `docs/ERROR_HANDLING.md`, `docs/ARCHITECTURE.md`
+* Documentation: `docs/ERROR_HANDLING.md`, `docs/ARCHITECTURE.md`, `docs/LOGGING.md`
 * Libraries: `teloxide`, `anyhow`, `tokio`, `tracing`
 * Key considerations:
   * Use `Result<T, AppError>` consistently
@@ -32,6 +32,9 @@ Twelfth task in the MVP phase (`ROADMAP.md`). Follows admin panel implementation
   * Redact PII in logs
   * Avoid infinite retry loops
   * Ensure FSM state is preserved during errors
+  * Hybrid:
+    * SaaS: error logs and notifications must include `client_id` and must not leak other tenants' data
+    * On‑Prem: license errors are treated as non-recoverable or feature-gating (per `docs/DEPLOY.md`)
 
 ## Acceptance Criteria
 * All handlers:
@@ -56,6 +59,7 @@ Twelfth task in the MVP phase (`ROADMAP.md`). Follows admin panel implementation
 * Logging:
   * All errors logged with `tracing` levels (info/warn/error)
   * Context includes: `user_id`, `chat_id`, `fsm_state`, `operation`
+  * SaaS: context also includes `client_id` and tenant-safe identifiers only
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md` and `docs/ERROR_HANDLING.md`, implement task 0012.

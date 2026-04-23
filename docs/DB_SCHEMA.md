@@ -27,6 +27,11 @@ Even in on‑prem, keeping the `client_id` column simplifies portability and avo
 
 In on‑prem you may keep a single row (`id=1`) or omit this table entirely if you don’t need tenant registry features locally.
 
+## Task alignment
+
+- Tenant routing and isolation requirements: `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md`
+- Core DB setup task: `docs/tasks/0002-setup-database-and-models.md`
+
 ### `users`
 
 - `id` (INTEGER/BIGINT, PK)

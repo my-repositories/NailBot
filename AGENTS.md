@@ -26,6 +26,12 @@
 | **Error handling & logging** | `docs/LOGGING.md` | Best practices for error propagation, logging levels, and diagnostics |
 | **Testing & validation** | `docs/TESTING.md` | Writing unit and integration tests, mocking Telegram API, and data validation |
 | **Deployment & operations** | `docs/DEPLOY.md` | Building, containerizing, and running the bot in production |
+| **Hybrid tenant isolation & routing** | `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md` | Hard constraints for SaaS tenant isolation and how updates map to `client_id` |
+| **On‑Prem licensing** | `docs/tasks/0015-onprem-license-key-system.md` | License validation rules and on‑prem-only behavior |
+| **Automated deployment (SaaS vs On‑Prem)** | `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` | CI/CD for SaaS and installer workflow for on‑prem buyers |
+| **Input validation rules** | `docs/VALIDATION_RULES.md` | Canonical validation rules (name/phone/date/time) + tenant-safe callback checks |
+| **Centralized error handling** | `docs/ERROR_HANDLING.md` | Error taxonomy, retry rules, logging context (mode/client_id), admin notifications |
+| **Reminder system scaling** | `docs/REMINDERS.md` | Reminder models and SaaS scaling constraints (avoid duplicates across workers) |
 
 ---
 
@@ -46,6 +52,9 @@
 * Always check the **ROADMAP.md** to ensure your task aligns with the current development phase.
 * For architectural decisions, consult **ARCHITECTURE.md**.
 * If a task isn’t covered here, create a new doc in `docs/` and update this router.
+* Hybrid rule of thumb:
+  * **SaaS**: every DB access and scheduler job is scoped by `client_id` and must not leak cross-tenant data
+  * **On‑Prem**: `client_id` remains constant (usually `1`), and **license checks apply**
 
 **Keep it simple. Point, don’t explain.**
 

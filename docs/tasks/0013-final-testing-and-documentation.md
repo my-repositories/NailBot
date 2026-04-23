@@ -17,6 +17,10 @@ Thirteenth and final task in the MVP phase (`ROADMAP.md`). Follows error handlin
 * [ ] Prepare deployment guide
 * [ ] Perform UX walkthrough
 * [ ] Create release checklist
+* [ ] Hybrid test matrix:
+  * [ ] On‑Prem: license required; single tenant
+  * [ ] SaaS: at least two tenants; verify isolation for every core feature
+
 
 ## Technical Details
 * Files:
@@ -33,6 +37,9 @@ Thirteenth and final task in the MVP phase (`ROADMAP.md`). Follows error handlin
   * Verify timezone handling (UTC vs local)
   * Ensure all user messages are clear and consistent
   * Check keyboard navigation flows
+  * Verify tenant isolation (SaaS): no cross-tenant reads/writes/callback effects
+  * Verify licensing behavior (On‑Prem): invalid/expired license blocks flows per policy
+
 
 ## Acceptance Criteria
 * Integration tests:
@@ -61,6 +68,8 @@ Thirteenth and final task in the MVP phase (`ROADMAP.md`). Follows error handlin
   * Tests passing in CI/CD
   * Docs up to date
   * Env templates included (`.env.onprem.example`, `.env.saas.example`)
+* SaaS-only items are clearly marked as such in docs/tasks and do not block on‑prem MVP release.
+
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/UI_GUIDE.md`, implement task 0013.
@@ -96,7 +105,7 @@ Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/UI_GUIDE.md`, im
    * List admin commands (`/admin`, `/stats`)
    * Describe dashboard buttons and their effects
    * Explain stats metrics (cancellation rate, busiest hours)
-4. Create `docs/DEPLOY.md`:
+4. Update `docs/DEPLOY.md`:
    * Prerequisites: Docker/Compose (recommended), or Rust + DB + environment variables
    * Steps:
      1. Copy `.env.onprem.example` or `.env.saas.example` to `.env`

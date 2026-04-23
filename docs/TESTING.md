@@ -1,5 +1,11 @@
 # Testing Guide
 
+Hybrid requirement:
+
+- Run the core test suite in **both modes**:
+  - **On‑Prem**: single tenant (`client_id = 1`), license required
+  - **SaaS**: at least two tenants (`client_id = A`, `client_id = B`) to verify isolation
+
 ## Types
 
 * **Unit Tests:** Individual functions (e.g., `check_subscription`, `parse_date`).
@@ -45,3 +51,8 @@ async fn test_handle_appointment_flow() {
 > Write unit test for `check_subscription` in `src/utils/subscription.rs`. Mock `Bot::get_chat_member` to return `Member`. Assert result is `true`. Add test for `Left` status → `false`.
 
 > Create integration test for `/start` handler. Mock bot updates. Verify main menu is sent. Use `assert_eq!` for message text.
+
+## Tenant isolation test cases (SaaS)
+
+- Create user/appointments under tenant A; ensure tenant B cannot list/cancel/modify them.
+- Ensure scheduler/reminder scans don’t cross tenants.

@@ -32,6 +32,9 @@ Ele11th task in the MVP phase (`ROADMAP.md`). Follows user appointment managemen
   * Format dates/times in local timezone (UTC+3)
   * Cache stats calculations for performance
   * Rate‑limit notification messages
+  * Hybrid scoping:
+    * On‑Prem: `ADMIN_IDS` is global (single tenant)
+    * SaaS: admin authorization is per-tenant; do not leak cross-tenant data
 
 ## Acceptance Criteria
 * `/admin` command:
@@ -68,6 +71,12 @@ Ele11th task in the MVP phase (`ROADMAP.md`). Follows user appointment managemen
   * Removes from active lists
   * Logs action with admin ID
 * All admin actions are logged via `tracing::info!`
+
+## SaaS-only extensions (explicitly SaaS-only)
+
+* [ ] (SaaS-only) Platform admin dashboard (cross-tenant): uptime, tenant list, error rates
+* [ ] (SaaS-only) Tenant lifecycle: create/suspend/reactivate tenants
+* [ ] (SaaS-only) Global billing/entitlements integration (if enabled)
 
 ## Prompt for AI Agent
 Based on `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, and `docs/ADMIN_GUIDE.md`, implement task 0011.

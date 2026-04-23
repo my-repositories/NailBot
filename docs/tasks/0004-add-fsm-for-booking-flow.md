@@ -12,6 +12,9 @@ Fourth task in the MVP phase (`ROADMAP.md`). Follows the implementation of basic
 * [ ] Add a state timeout (10 minutes) with return to `Idle`.
 * [ ] Log state changes (`docs/LOGGING.md`).
 * [ ] Store user state in memory (use `HashMap<UserId, AppointmentState>` for MVP).
+* [ ] Hybrid session keying:
+  * [ ] SaaS: store session by `(client_id, user_id)` to prevent cross-tenant bleed
+  * [ ] On‑Prem: still use `(client_id=1, user_id)` for the same shapes
 
 ## Technical Details
 * Files:
@@ -30,6 +33,7 @@ Fourth task in the MVP phase (`ROADMAP.md`). Follows the implementation of basic
 * If no action is taken for 10 minutes, the state resets to `Idle`.
 * Each state change is logged with `tracing::info!`.
 * The bot does not accept inputs intended for other states (e.g., phone number in `SelectingDate` state).
+* In SaaS mode, two tenants can have the same Telegram user ID without sharing session/state.
 
 ## Prompt for AI Agent
 Based on `docs/FSM_GUIDE.md` and `docs/LOGGING.md`, implement task 0004.

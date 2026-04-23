@@ -3,6 +3,10 @@
 
 Welcome to the appointment booking bot! This guide explains how to book, view, and manage your appointments.
 
+## Hybrid note (SaaS vs On‑Prem)
+
+This bot can be operated either as a hosted SaaS service (many salons/tenants) or as an on‑prem installation (one salon). The booking experience is the same; your data is isolated within your salon/workspace.
+
 ## How to Book an Appointment
 
 1. Start the bot by sending `/start`.

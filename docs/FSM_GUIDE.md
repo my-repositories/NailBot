@@ -1,5 +1,10 @@
 # FSM Guide
 
+Hybrid requirement:
+
+- **SaaS (multi-tenant)**: FSM/session storage must be keyed by **tenant + user**, e.g. `(client_id, telegram_id)`.
+- **On‑Prem (single-tenant)**: a single implicit tenant (e.g., `client_id = 1`) still uses the same shapes, keeping codepaths unified.
+
 ## States
 
 * `Idle` — Default state.
@@ -23,7 +28,9 @@
 
 ## Rules
 
-* Store state per user (telegram_id).
+* Store state per user.
+  - SaaS: key = `(client_id, telegram_id)`
+  - On‑Prem: key = `(1, telegram_id)`
 * Timeout: 10 minutes to return to `Idle`.
 * On timeout: send message and reset state.
 * Log state changes with `tracing`.

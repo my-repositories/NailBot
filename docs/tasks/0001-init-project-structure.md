@@ -12,13 +12,16 @@ First task in the MVP phase (`ROADMAP.md`). Required before starting any functio
 * [ ] Add dependencies to `Cargo.toml` (see `docs/README.md`).
 * [ ] Create a basic `src/main.rs` that outputs «Bot started».
 * [ ] Set up logging (`docs/LOGGING.md`).
+* [ ] Define distribution mode wiring early:
+  * [ ] `MODE=saas|onprem` parsed into a typed `Settings` value
+  * [ ] a `TenantContext` concept exists even in on‑prem (constant `client_id = 1`)
 
 ## Technical Details
 * Files:
   * `Cargo.toml`
   * `src/main.rs`
 * Dependencies: `teloxide`, `tokio`, `rusqlite`, `chrono`, `dotenvy`, `tracing`, `serde`.
-* Documentation: `docs/README.md`, `docs/SETUP.md`, `docs/LOGGING.md`.
+* Documentation: `docs/README.md`, `docs/SETUP.md`, `docs/LOGGING.md`, `docs/ARCHITECTURE.md`.
 
 ## Acceptance Criteria
 * `cargo build` runs without errors.
@@ -32,3 +35,4 @@ You are an experienced Rust developer. Create code for task 0001 (project initia
    * load configuration from `.env`;
    * set up logging (tracing);
    * implement an async `main()` function that prints «NailBot started» and waits for SIGINT.
+3. Ensure `MODE=saas|onprem` is parsed and logged at startup (without leaking secrets).

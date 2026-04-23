@@ -2,6 +2,11 @@
 
 This guide is for staff members who manage appointments and monitor the system.
 
+## Hybrid scope (SaaS vs On‑Prem)
+
+- **On‑Prem**: you manage the single local tenant.
+- **SaaS**: you manage **your tenant/workspace** only. If you need “platform-level” operations (billing, tenant creation), that is handled by SaaS platform admins and is not available inside a tenant bot.
+
 ## Accessing the Admin Panel
 1. Send `/admin` to the bot.
 2. If you’re an authorized admin (configured via `ADMIN_IDS`), you’ll see the dashboard.

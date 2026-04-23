@@ -34,6 +34,7 @@ Eighth task in the MVP phase (`ROADMAP.md`). Follows user data collection. Compl
   * Use transactional writes to avoid partial saves
   * Log confirmation/cancellation events
   * Redact PII in logs (e.g., phone numbers)
+  * Tenant isolation (SaaS): appointment inserts and reads are scoped to `client_id`; callbacks must not allow cross-tenant appointment manipulation
 
 ## Acceptance Criteria
 * In `Confirming` state:

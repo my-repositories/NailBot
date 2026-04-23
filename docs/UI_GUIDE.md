@@ -1,5 +1,10 @@
 # UI Design Guide
 
+This guide applies to both distribution modes:
+
+- **SaaS (multi-tenant)**: UI copy may be tenant-branded; actions must never reference or expose other tenants.
+- **On‑Prem (single-tenant)**: UI is typically fully branded for one customer.
+
 ## Principles
 
 * Keep messages short and clear.
@@ -16,6 +21,19 @@
 
 * Use HTML for bold/italic: `<b>Bold</b>`, `<i>Italic</i>`.
 * Limit message length to 4096 chars.
+
+## Hybrid UX rules (SaaS vs On‑Prem)
+
+### Tenant-safe messaging (SaaS)
+
+- Never display internal identifiers (`client_id`, database IDs).
+- Avoid copy that implies “global” admin access across tenants.
+- If support/admin features exist, ensure wording is “your workspace/salon” (tenant scoped).
+
+### Branding
+
+- Prefer tenant-provided display name (e.g., salon name) when available.
+- Keep a sane default brand (“NailBot”) if tenant branding is missing.
 
 ## Examples
 

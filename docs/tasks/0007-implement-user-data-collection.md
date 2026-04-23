@@ -43,6 +43,7 @@ Seventh task in the MVP phase (`ROADMAP.md`). Follows time slot selection implem
   * Returns to previous state (`InputtingName` ← `InputtingPhone`)
   * Preserves previously entered data
 * All inputs are logged (phone redacted as `+***-***-***-1234`)
+* In SaaS mode, logs include `client_id` for each input/state transition (without leaking PII)
 
 ## Prompt for AI Agent
 Based on `docs/FSM_GUIDE.md` and `docs/VALIDATION_RULES.md`, implement task 0007.

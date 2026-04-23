@@ -42,6 +42,7 @@ Sixth task in the MVP phase (`ROADMAP.md`). Follows calendar keyboard implementa
 * «Reschedule Date» returns to date selection, showing current month
 * If no slots are available, show message: «No free slots on {date}. Please select another date.» and display calendar
 * Keyboard updates correctly when returning from other states
+* Tenant isolation (SaaS): availability queries are scoped to `client_id` and cannot be influenced by other tenants’ bookings
 
 
 ## Prompt for AI Agent
