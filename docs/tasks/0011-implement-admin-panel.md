@@ -5,7 +5,7 @@ Create an administrative interface for staff to monitor appointments, receive no
 
 
 ## Context
-Ele11th task in the MVP phase (`ROADMAP.md`). Follows user appointment management. Enables salon staff to oversee bookings and respond to new appointments.
+Eleventh task in the MVP phase (`ROADMAP.md`). Follows user appointment management. Enables salon staff to oversee bookings and respond to new appointments.
 
 ## API/Bot Split Alignment
 * [ ] Admin data and mutations (stats, mark-done, today list) are served by API endpoints.
