@@ -3,8 +3,8 @@ use regex::Regex;
 use teloxide::types::UserId;
 use tracing::info;
 
-use crate::api::database::models::AppointmentDraft;
 use crate::bot::states::{AppointmentState, SessionStore, UserSession};
+use crate::shared::models::AppointmentDraft;
 
 pub fn start_message() -> &'static str {
     "👋 Welcome to NailBot! How can I help you?"

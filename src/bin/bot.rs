@@ -1,5 +1,4 @@
-use nailbot::api::database::init_db;
-use nailbot::bot::{build_bot, reminders::start_reminder_service};
+use nailbot::bot::build_bot;
 use nailbot::shared::config::{Mode, Settings};
 use tracing::{info, warn};
 use tracing_subscriber::EnvFilter;
@@ -21,9 +20,8 @@ async fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    let pool = init_db(&settings.database_url).await?;
     let bot = build_bot(&settings.bot_token);
-    start_reminder_service(bot, pool);
+    drop(bot);
 
     info!("Bot service started");
     tokio::signal::ctrl_c().await?;

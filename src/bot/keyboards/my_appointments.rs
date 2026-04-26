@@ -1,4 +1,4 @@
-use crate::api::database::models::Appointment;
+use crate::shared::models::Appointment;
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 
 pub fn my_appointments_keyboard(
