@@ -15,10 +15,11 @@ The deployment workflow below uses **Docker + Compose** so both distributions sh
   - SQLite (on‑prem friendly; mounted volume)
   - PostgreSQL (recommended for SaaS production)
 
-## Container Images
+## Container Images (Target Layout)
 
-- `Dockerfile` builds a single executable container.
-- `compose.yaml` runs the bot and (optionally) Postgres.
+- `api` container: HTTP API service with domain logic and DB access.
+- `bot` container: Telegram adapter calling `api` endpoints.
+- `db` container (optional): Postgres for SaaS or on-prem deployments that choose Postgres.
 
 ## Environment Files
 
@@ -54,10 +55,10 @@ docker compose --env-file .env up -d --build
 4. Verify:
 
 - Send `/start` to the bot.
-- Check logs:
+- Check API and bot logs:
 
 ```bash
-docker compose logs -f app
+docker compose logs -f api bot
 ```
 
 ## SaaS Deployment (Multi-tenant)
@@ -77,7 +78,7 @@ cp .env.saas.example .env
 - `SAAS_TENANT_REGISTRY=...`
 - Optional billing variables if enabled
 
-3. Start (includes Postgres service):
+3. Start (API + bot + optional Postgres):
 
 ```bash
 docker compose --env-file .env --profile postgres up -d --build
@@ -87,6 +88,7 @@ docker compose --env-file .env --profile postgres up -d --build
 
 - **SaaS CI/CD**: see `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` (SaaS-only).
 - **On‑Prem installer**: see `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` (On‑Prem only).
+- **API/Bot separation baseline**: see `docs/tasks/0000-separate-api-service-and-bot-handler.md`.
 
 ## License Key Verification (On‑Prem Concept)
 
@@ -121,6 +123,11 @@ If you choose to bind a license to an installation, fingerprint from stable inpu
 ## Tenant isolation note (SaaS)
 
 SaaS deployments must ensure **every request and background job** is executed with a resolved `client_id` and uses tenant-scoped queries. See `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md`.
+
+In split deployments, this applies to both:
+
+- API request handling
+- bot-to-API context propagation
 
 ## Operational Notes
 

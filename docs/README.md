@@ -1,16 +1,17 @@
-# Documentation Index (Hybrid: SaaS + On‑Prem)
+# Documentation Index (Hybrid: SaaS + On‑Prem, API + Bot)
 
-This repository supports two distribution modes from one core codebase:
+This repository supports two distribution modes from one core codebase, with Web API as core and Telegram bot as one client adapter:
 
 - **SaaS (multi-tenant)**: multiple tenants identified by `client_id`
 - **On‑Prem (single-tenant)**: one tenant (usually `client_id = 1`) with license verification
 
 ## Start here
 
-- `docs/ARCHITECTURE.md` — the hybrid architecture and layering constraints
-- `docs/SETUP.md` — configuration strategy and env variables by mode
-- `docs/DEPLOY.md` — Docker/Compose deployment + licensing concept
+- `docs/ARCHITECTURE.md` — hybrid architecture, API-first layering, and adapter boundaries
+- `docs/SETUP.md` — configuration strategy and env variables by mode/service
+- `docs/DEPLOY.md` — deployment options for API + bot + licensing
 - `docs/DB_SCHEMA.md` — tenant-safe schema and migration notes
+- `docs/tasks/0000-separate-api-service-and-bot-handler.md` — task spec for bot/API separation
 
 ## Feature guides
 

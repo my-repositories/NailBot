@@ -26,6 +26,7 @@
 | **Error handling & logging** | `docs/LOGGING.md` | Best practices for error propagation, logging levels, and diagnostics |
 | **Testing & validation** | `docs/TESTING.md` | Writing unit and integration tests, mocking Telegram API, and data validation |
 | **Deployment & operations** | `docs/DEPLOY.md` | Building, containerizing, and running the bot in production |
+| **API/Bot service separation** | `docs/tasks/0000-separate-api-service-and-bot-handler.md` | Requirements for splitting Telegram adapter from Web API business core |
 | **Hybrid tenant isolation & routing** | `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md` | Hard constraints for SaaS tenant isolation and how updates map to `client_id` |
 | **On‑Prem licensing** | `docs/tasks/0015-onprem-license-key-system.md` | License validation rules and on‑prem-only behavior |
 | **Automated deployment (SaaS vs On‑Prem)** | `docs/tasks/0016-automated-deployment-saas-vs-onprem.md` | CI/CD for SaaS and installer workflow for on‑prem buyers |
@@ -43,6 +44,7 @@
 * **Adding a reminder feature?** → Read `docs/SCHEDULER.md`.
 * **Checking if user is subscribed?** → Read `docs/SUBSCRIPTION.md`.
 * **Setting up the project for the first time?** → Read `docs/SETUP.md`.
+* **Need to split bot and backend API?** → Read `docs/tasks/0000-separate-api-service-and-bot-handler.md`.
 
 ---
 

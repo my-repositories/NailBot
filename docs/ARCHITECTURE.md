@@ -5,15 +5,36 @@ This codebase is designed to support **two distribution modes** from a shared co
 - **SaaS (Multi-tenant)**: one hosted instance serves many client bots/tenants, keyed by `client_id`, with optional subscription/billing logic.
 - **On‑Premise (Single-tenant)**: a standalone instance serves exactly one tenant, deployed by the customer (source sale) with **license key verification**.
 
-The key architectural goal is **modularity**: keep your booking/admin logic stable while swapping configuration, database backends, and distribution-specific features.
+The key architectural goal is **modularity**: keep booking/admin logic stable while supporting multiple client channels (Telegram now, Web/Mobile next) through one backend contract.
 
-## Modular Architecture
+## Modular Architecture (API-first)
 
-### Business Logic Core (domain + use-cases)
+### Client Adapters (transport layer)
 
-**Responsibility**: all “what the bot does” rules, independent of storage and deployment mode.
+**Responsibility**: receive channel-specific input and call backend API/application contracts.
 
-- **Conversation + flows**: booking flow, admin flow, reminders logic, subscription check policy.
+- **Telegram bot adapter**: update parsing, FSM/dialog state, message rendering.
+- **Future adapters**: web frontend and mobile app clients.
+
+**Design constraints**:
+
+- No direct DB access from adapters.
+- No business rule duplication in adapters.
+- Map backend errors to channel-specific UX only.
+
+### API Layer (HTTP contract)
+
+**Responsibility**: expose versioned endpoints consumed by bot/web/mobile clients.
+
+- Request/response DTOs
+- Auth/context extraction (including tenant context)
+- Error contract for all clients
+
+### Business Logic Core (application + domain)
+
+**Responsibility**: all booking/admin rules, independent of transport, storage, and distribution mode.
+
+- **Use-case flows**: booking, admin operations, reminders, subscription policy checks.
 - **Domain invariants**: slot availability, cancellation rules, working hours, pricing rules.
 - **Use-cases**: “Create appointment”, “List appointments”, “Close day”, “Send reminder”.
 
@@ -21,7 +42,7 @@ The key architectural goal is **modularity**: keep your booking/admin logic stab
 
 - No direct access to env vars.
 - No direct SQL queries.
-- No Telegram I/O types in the domain layer; use thin adapters/interfaces.
+- No Telegram/Web/Mobile I/O types in domain/application layers.
 
 ### Database Adapters (ports + implementations)
 
@@ -58,9 +79,15 @@ The key architectural goal is **modularity**: keep your booking/admin logic stab
 
 These flows remain the same in both modes; only configuration and persistence wiring differ.
 
-1. **User command** → update received → handler routes → core use-case executes → state changes persisted → response sent.
-2. **Booking**: `/start` → menu → date → time → contact data → persist appointment → schedule reminder.
-3. **Admin**: `/admin` → panel → manage schedule (close day, open slots) → update DB.
+1. **Telegram flow**: user update → bot adapter/FSM → API endpoint → use-case → repository → API response → bot message.
+2. **Web/mobile flow**: client request → API endpoint → use-case → repository → API response.
+3. **Booking/Admin behavior** stays consistent across channels because rules live in application/domain layers.
+
+## Implementation Task Anchor
+
+The separation work is tracked in:
+
+- `docs/tasks/0000-separate-api-service-and-bot-handler.md`
 
 ## Dependencies (Typical)
 

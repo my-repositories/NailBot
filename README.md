@@ -1,13 +1,26 @@
-# NailBot: Telegram Bot for Nail Appointment Booking
+# NailBot: Booking Platform Core (API + Telegram Bot)
 
-An asynchronous Telegram bot written in Rust for booking appointments with a nail technician.
+An asynchronous Rust project for appointment booking where Telegram is one client channel and Web API is the system core for future channel expansion.
 
 ## Distribution Model (Hybrid)
 
-This repository is designed to support two modes from one core codebase:
+This repository supports two modes from one core codebase:
 
-- **SaaS (Multi-tenant)**: one hosted instance serves multiple client bots/tenants with optional subscription/billing logic.
-- **On‑Premise (Single-tenant)**: a standalone, customer-hosted instance (source code sale) with license key verification.
+- **SaaS (Multi-tenant)**: one hosted platform serves multiple tenants by `client_id`.
+- **On‑Premise (Single-tenant)**: one customer-hosted tenant with license key verification.
+
+## Architecture Direction
+
+The target architecture is separated into:
+
+- **Web API service**: owns business logic, validation, and data access.
+- **Bot handler**: Telegram transport adapter that calls the Web API.
+
+Why this split:
+
+- Reuse the same booking backend for web and mobile apps.
+- Keep business rules in one place.
+- Allow independent scaling and deployment of API and bot workers.
 
 ## Technologies
 
@@ -21,7 +34,7 @@ This repository is designed to support two modes from one core codebase:
 
 ## Features
 
-**For Users:**
+**For end users (via Telegram today):**
 * Appointment booking via calendar
 * Time slot selection
 * Name and phone input
@@ -29,7 +42,7 @@ This repository is designed to support two modes from one core codebase:
 * Subscription verification
 * Price list & portfolio
 
-**For Administrators:**
+**For administrators:**
 * Schedule management
 * Close days for bookings
 * View/cancel client appointments
@@ -39,22 +52,25 @@ This repository is designed to support two modes from one core codebase:
 * 24‑hour reminders
 * Task recovery after restart
 
-## Installation
+## Run (Current Documentation Target)
+
+Today this repository is documentation-first. Implementation is tracked by task docs.
+
+When implementation starts, expected local flow is:
 
 1. Clone: `git clone <url>`
-2. `cp .env.onprem.example .env`
-3. Fill `.env` (at minimum: MODE, BOT_TOKEN, ADMIN_IDS, DATABASE_URL)
-4. `cargo build`
-5. `cargo run`
+2. Create env file (mode-specific)
+3. Start API + bot (single process in dev or separate services)
 
 ## Structure
 
 See:
 
-- `docs/ARCHITECTURE.md` (modular hybrid architecture)
-- `docs/SETUP.md` (env strategy for SaaS vs on‑prem)
+- `docs/ARCHITECTURE.md` (API-first modular hybrid architecture)
+- `docs/SETUP.md` (env strategy for API and bot by mode)
 - `docs/DB_SCHEMA.md` (tenant-safe schema)
-- `docs/DEPLOY.md` (Docker/Compose deployment + licensing concept)
+- `docs/DEPLOY.md` (API/bot deployment patterns + licensing concept)
+- `docs/tasks/0000-separate-api-service-and-bot-handler.md` (separation task definition)
 
 ## Contributing
 

@@ -2,12 +2,13 @@
 
 ## MVP (v0.1) — 2–3 Weeks
 
-**Goal:** Launch basic bot with booking and admin panel.
+**Goal:** Establish API-first backend and keep Telegram as first client.
 
+* Epic 0: API/Bot separation foundation (`docs/tasks/0000-separate-api-service-and-bot-handler.md`)
 * Epic 1: Core Infrastructure
 * Epic 2: Database
-* Epic 3: User Booking Flow (Basic)
-* Epic 4: Admin Panel (Basic)
+* Epic 3: User Booking Flow (Telegram via API)
+* Epic 4: Admin Panel (Telegram via API)
 * Epic H1: Hybrid foundations (MODE routing, tenant context, on‑prem license gate)
   * Tenant isolation checklist for every repository/query
   * License key system (on‑prem): validate at startup + periodic re-check
@@ -32,10 +33,12 @@
 
 ## Future (v1.x)
 
+* Web app client (consumes same API)
+* Mobile app client (consumes same API)
 * Online payment
 * Review system
 * Admin stats
 * Multi‑language
-* Mini App
+* Telegram Mini App (as additional API client)
 * DB backup
 * SaaS-only: metering, per-tenant quotas, audit logs

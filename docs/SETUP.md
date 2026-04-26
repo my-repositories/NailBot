@@ -5,6 +5,11 @@ This project supports two operating modes:
 - **SaaS (Multi-tenant)**: one hosted instance serves multiple clients/tenants.
 - **On‑Prem (Single-tenant)**: a customer-hosted instance serves a single tenant and requires a license key.
 
+Service topology target:
+
+- **API service**: business logic + DB access
+- **Bot service**: Telegram adapter that calls API
+
 ## Prerequisites
 
 - Rust toolchain (MSRV as defined by the repo; typically 1.70+ for modern async stacks)
@@ -23,6 +28,8 @@ All configuration is grouped into three layers of environment variables.
 - `DATABASE_URL`: e.g. `sqlite:///app/data/bot.db` or `postgres://user:pass@db:5432/nailbot`
 - `LOG_LEVEL`: e.g. `info`, `debug`
 - `TZ`: e.g. `Europe/Moscow`
+- `API_BASE_URL`: base URL for clients (bot/web/mobile) to reach Web API
+- `API_TIMEOUT_MS`: request timeout for internal clients (for example, bot -> api)
 
 ### 2) SaaS-specific (hosted, multi-tenant)
 
@@ -64,7 +71,12 @@ cp .env.onprem.example .env
 
 3. Edit `.env` (at minimum set `MODE=onprem`, `BOT_TOKEN`, `ADMIN_IDS`, and `DATABASE_URL`).
 
-4. Build and run:
+4. Run strategy (documentation target):
+
+- **Monolith dev mode**: bot and API in one process for faster local iteration.
+- **Split mode**: run API and bot as separate processes/services to match production.
+
+5. Build and run:
 
 ```bash
 cargo build
@@ -79,6 +91,12 @@ SaaS mode requires a tenant registry and a way to route updates per tenant/bot.
 - If you use **webhooks**: route by URL path, host header, or bot-specific webhook secret per tenant.
 
 The core business logic remains the same; only the configuration layer and update routing differ.
+
+## Separation task reference
+
+For full requirements of the API/bot split, see:
+
+- `docs/tasks/0000-separate-api-service-and-bot-handler.md`
 
 ## Troubleshooting
 
