@@ -18,7 +18,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates tzdata \
   && rm -rf /var/lib/apt/lists/*
 
-# Default data directory for SQLite and other runtime files
+# Default data directory for runtime files
 RUN mkdir -p /app/data
 
 ENV RUST_LOG=info

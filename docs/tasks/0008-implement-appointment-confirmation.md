@@ -32,7 +32,7 @@ Eighth task in the MVP phase (`ROADMAP.md`). Follows user data collection. Compl
   * `src/keyboards/confirmation.rs` (new — confirmation keyboard)
   * `src/keyboards/mod.rs` (update to include confirmation module)
 * Documentation: `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, `docs/UI_GUIDE.md`, `docs/FSM_GUIDE.md`
-* Libraries: `teloxide`, `rusqlite`, `chrono`
+* Libraries: `teloxide`, `sqlx`, `chrono`
 * Key considerations:
   * Format the confirmation message clearly and readably
   * Ensure all data from `UserSession.appointment_data` is included

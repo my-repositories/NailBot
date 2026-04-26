@@ -30,7 +30,7 @@ Eleventh task in the MVP phase (`ROADMAP.md`). Follows user appointment manageme
   * `src/keyboards/admin.rs` (new — admin keyboards)
   * `src/config.rs` (add `ADMIN_IDS` array)
 * Documentation: `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, `docs/ADMIN_GUIDE.md`
-* Libraries: `teloxide`, `rusqlite`, `chrono`
+* Libraries: `teloxide`, `sqlx`, `chrono`
 * Key considerations:
   * Use `ADMIN_IDS` from config to check permissions
   * Ensure client PII (phone) is visible only to admins

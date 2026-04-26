@@ -29,7 +29,7 @@ Tenth task in the MVP phase (`ROADMAP.md`). Follows reminder implementation. Pro
   * `src/keyboards/my_appointments.rs` (new — my appointments keyboard)
   * `src/keyboards/mod.rs` (update to include my_appointments module)
 * Documentation: `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, `docs/UI_GUIDE.md`
-* Libraries: `teloxide`, `rusqlite`, `chrono`
+* Libraries: `teloxide`, `sqlx`, `chrono`
 * Key considerations:
   * Query DB by `user_id` and sort by date (upcoming first)
   * Tenant isolation (SaaS): all queries are scoped to `client_id`; callbacks must verify appointment belongs to the current tenant

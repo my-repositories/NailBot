@@ -27,7 +27,7 @@ First task in the MVP phase (`ROADMAP.md`). Required before starting any functio
 * Files:
   * `Cargo.toml`
   * `src/main.rs`
-* Dependencies: `teloxide`, `tokio`, `rusqlite`, `chrono`, `dotenvy`, `tracing`, `serde`.
+* Dependencies: `teloxide`, `tokio`, `sqlx`, `chrono`, `dotenvy`, `tracing`, `serde`.
 * Documentation: `docs/README.md`, `docs/SETUP.md`, `docs/LOGGING.md`, `docs/ARCHITECTURE.md`.
 
 ## Acceptance Criteria
@@ -37,7 +37,7 @@ First task in the MVP phase (`ROADMAP.md`). Required before starting any functio
 
 ## Prompt for AI Agent
 You are an experienced Rust developer. Create code for task 0001 (project initialization).
-1. Write the contents of `Cargo.toml` with the following dependencies: teloxide, tokio, rusqlite, chrono, dotenvy, tracing, serde.
+1. Write the contents of `Cargo.toml` with the following dependencies: teloxide, tokio, sqlx, chrono, dotenvy, tracing, serde.
 2. Create `src/main.rs`. In it:
    * load configuration from `.env`;
    * set up logging (tracing);

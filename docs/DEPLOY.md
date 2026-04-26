@@ -141,5 +141,5 @@ In split deployments, this applies to both:
 ## Troubleshooting
 
 - **Bot won’t start**: verify env vars are set; inspect `docker compose logs -f app`.
-- **Database errors**: check `DATABASE_URL`, file permissions (SQLite), or DB connectivity (Postgres).
+- **Database errors**: check `DATABASE_URL`, credentials, network access, and Postgres availability.
 - **No admin access**: confirm `ADMIN_IDS` format (comma-separated integers).

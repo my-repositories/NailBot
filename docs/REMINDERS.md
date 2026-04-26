@@ -38,6 +38,5 @@ Minimum fields needed to send a reminder (tenant-scoped):
 
 ## Operational notes
 
-- **SQLite** (common on‑prem): keep a single app instance (single writer).
-- **Postgres** (recommended SaaS): supports safe coordination and indexing for reminder scans.
+- **Postgres**: supports safe coordination and indexing for reminder scans.
 

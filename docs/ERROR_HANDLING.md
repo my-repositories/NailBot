@@ -17,7 +17,7 @@ This project runs in two distribution modes:
 - **Config / Boot**: missing env vars, invalid values, invalid mode.
 - **License (On‑Prem)**: missing/invalid/expired license key.
 - **Telegram API**: rate limits, network timeouts, blocked bot, invalid token.
-- **Database**: connection failures, migration failures, lock timeouts (SQLite), serialization errors.
+- **Database**: connection failures, migration failures, transaction/contention timeouts, serialization errors.
 - **Domain / Validation**: invalid date/time selection, invalid phone, invalid state transition.
 
 ## Retry policy (transient only)
@@ -25,7 +25,7 @@ This project runs in two distribution modes:
 Use exponential backoff with jitter for transient errors:
 
 - Telegram: retry on network timeouts and `429` (respect `retry_after` if available).
-- DB: retry on **lock/contention** (SQLite) and transient connection errors (Postgres).
+- DB: retry on transient connection errors and retryable transaction/contention errors (Postgres).
 - Never retry on: invalid input, permission errors, missing rows, invalid license, invalid token.
 
 ## User-facing messaging

@@ -79,7 +79,7 @@ Based on `docs/ARCHITECTURE.md` and `docs/ERROR_HANDLING.md`, implement task 001
    #[derive(Error, Debug)]
    pub enum AppError {
        #[error("Database error: {0}")]
-       Database(#[from] rusqlite::Error),
+      Database(#[from] sqlx::Error),
 
        #[error("Telegram API error: {0}")]
        Telegram(#[from] teloxide::RequestError),

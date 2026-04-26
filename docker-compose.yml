@@ -30,7 +30,7 @@ services:
       MODE: ${MODE:-onprem}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       TZ: ${TZ:-UTC}
-      DATABASE_URL: ${DATABASE_URL:-sqlite:///app/data/bot.db}
+      DATABASE_URL: ${DATABASE_URL:-postgres://nailbot:nailbot@db:5432/nailbot}
       API_BIND: ${API_BIND:-0.0.0.0:8080}
       LICENSE_KEY: ${LICENSE_KEY:-}
       LICENSE_SERVER_URL: ${LICENSE_SERVER_URL:-}

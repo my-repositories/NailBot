@@ -15,7 +15,7 @@ This task is documentation-only and should be completed before implementation-he
 
 ### 1) PostgreSQL Standardization
 * [ ] Update documentation to treat PostgreSQL as the canonical database backend.
-* [ ] Remove/replace guidance that positions SQLite as primary runtime DB.
+* [ ] Remove/replace any guidance that conflicts with PostgreSQL-only runtime DB.
 * [ ] Align architecture and setup docs with:
   * [ ] Postgres connection pooling
   * [ ] migrations lifecycle

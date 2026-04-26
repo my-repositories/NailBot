@@ -33,7 +33,7 @@ Hybrid requirement:
   ```
 * **ERROR:**
   ```
-  Database connection failed: SQLite error: unable to open database file
+  Database connection failed: Postgres error: connection refused
   ```
 
 ## Setup

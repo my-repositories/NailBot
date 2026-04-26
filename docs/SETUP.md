@@ -111,4 +111,4 @@ For full requirements of the API/bot split, see:
 
 - **No such file or directory**: ensure your env file exists and is loaded (or variables are set in the shell/container).
 - **Invalid token**: verify bot token format from @BotFather.
-- **Database locked (SQLite)**: ensure only one writer process is using the DB file; for multi-worker workloads prefer Postgres.
+- **Database connection/contention errors**: verify `DATABASE_URL`, DB availability, and retry/backoff settings.

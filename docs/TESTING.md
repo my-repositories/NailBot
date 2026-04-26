@@ -16,7 +16,7 @@ Hybrid requirement:
 
 * `cargo test` — run all tests.
 * `mockall` — mock external dependencies (Telegram API).
-* `tempfile` — create temporary SQLite DB for tests.
+* `testcontainers` / dedicated Postgres test DB — run integration tests against PostgreSQL.
 
 ## Test Structure
 

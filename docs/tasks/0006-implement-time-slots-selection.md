@@ -28,7 +28,7 @@ Sixth task in the MVP phase (`ROADMAP.md`). Follows calendar keyboard implementa
   * `src/handlers/user.rs` — extend with time slot handlers
   * `src/database/queries.rs` — add time slot queries
 * Documentation: `docs/ARCHITECTURE.md`, `docs/DB_SCHEMA.md`, `docs/UI_GUIDE.md`, `docs/BUSINESS_RULES.md`
-* Libraries: `teloxide`, `rusqlite`, `chrono`, `regex`
+* Libraries: `teloxide`, `sqlx`, `chrono`, `regex`
 * Key considerations:
   * Use business hours and interval from `docs/BUSINESS_RULES.md` (e.g., 09:00–20:00, 30‑min intervals)
   * Query `appointments` table to check for conflicts
