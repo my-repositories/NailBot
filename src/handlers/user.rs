@@ -45,6 +45,18 @@ pub fn validate_name(name: &str) -> bool {
     !trimmed.is_empty() && trimmed.len() <= 50
 }
 
+pub fn name_prompt() -> &'static str {
+    "Please enter your full name:"
+}
+
+pub fn phone_prompt() -> &'static str {
+    "Please enter your phone number:"
+}
+
+pub fn back_button_label() -> &'static str {
+    "🔙 Back"
+}
+
 pub fn validate_phone(phone: &str) -> bool {
     Regex::new(r"^[+0-9()\s\-]{10,25}$")
         .map(|r| r.is_match(phone))
