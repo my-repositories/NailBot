@@ -8,14 +8,14 @@ RUN cargo install cargo-chef
 FROM chef AS planner
 COPY . .
 # Генерируем рецепт кэша
-RUN cargo chef prepare --recipe-json recipe.json
+RUN cargo chef prepare --recipe-path recipe.json
 
 # --- Stage 3: Сборка зависимостей ---
 FROM chef AS builder 
 COPY --from=planner /app/recipe.json recipe.json
 ENV CARGO_UNSTABLE_EDITION2024=true
 # Собираем только библиотеки (этот слой закешируется)
-RUN cargo chef cook --release --recipe-json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
 
 # --- Stage 4: Сборка самих бинарников ---
 COPY . .
