@@ -4,20 +4,36 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
-    profiles: ["postgres"]
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-nailbot}
-      POSTGRES_USER: ${POSTGRES_USER:-nailbot}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nailbot}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 20
+    expose:
+        - 5432
     ports:
       - "5432:5432"
+
+  dbpga:
+    image: dpage/pgadmin4
+    profiles: ["pgadmin"]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASS}
+    ports:
+      - "5050:80"
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
 
   api:
     build:

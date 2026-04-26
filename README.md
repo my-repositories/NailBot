@@ -74,7 +74,7 @@ This project now runs as **two separate applications**:
 ### Docker Compose
 
 1. Ensure `.env` exists
-2. `docker compose up -d --build`
+2. `docker compose --profile pgadmin up -d --build`
 3. Check services: `docker compose ps`
 
 ## i18n Baseline (RU/EN)
