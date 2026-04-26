@@ -85,7 +85,7 @@ This project now runs as **two separate applications**:
 - SaaS resolves locale per user (tenant-scoped).
 - On‑Prem uses env default locale with optional per-user override.
 - Supported locale values are normalized to `en` / `ru` (for example, `en-US` -> `en`, `ru-RU` -> `ru`).
-- Bot helpers now provide user-aware locale resolution via DB (`users.locale`) with fallback to `DEFAULT_LOCALE`.
+- Bot resolves locale through API (`/api/v1/users/{telegram_id}/locale`) with fallback to `DEFAULT_LOCALE`.
 
 ## Structure
 

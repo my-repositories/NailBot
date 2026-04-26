@@ -26,6 +26,7 @@ impl FromStr for Mode {
 pub struct Settings {
     pub mode: Mode,
     pub database_url: String,
+    pub api_base_url: String,
     pub bot_token: String,
     pub default_locale: String,
     pub admin_ids: Vec<i64>,
@@ -39,6 +40,8 @@ impl Settings {
             .parse()?;
         let database_url =
             std::env::var("DATABASE_URL").unwrap_or_else(|_| "postgres://localhost/nailbot".to_string());
+        let api_base_url =
+            std::env::var("API_BASE_URL").unwrap_or_else(|_| "http://127.0.0.1:8080".to_string());
         let bot_token = std::env::var("BOT_TOKEN").unwrap_or_default();
         let default_locale = std::env::var("DEFAULT_LOCALE").unwrap_or_else(|_| "en".to_string());
         let admin_ids = std::env::var("ADMIN_IDS")
@@ -51,6 +54,7 @@ impl Settings {
         Ok(Self {
             mode,
             database_url,
+            api_base_url,
             bot_token,
             default_locale,
             admin_ids,

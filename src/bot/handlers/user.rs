@@ -1,6 +1,5 @@
 use chrono::{NaiveDate, NaiveTime, Utc};
 use regex::Regex;
-use sqlx::PgPool;
 use teloxide::types::UserId;
 use tracing::info;
 
@@ -18,22 +17,22 @@ pub fn help_message(locale: &str) -> String {
 }
 
 pub async fn start_message_for_user(
-    pool: &PgPool,
+    api_base_url: &str,
     client_id: i64,
     user_id: UserId,
     default_locale: &str,
 ) -> String {
-    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    let locale = resolve_user_locale(api_base_url, client_id, user_id, default_locale).await;
     start_message(&locale)
 }
 
 pub async fn help_message_for_user(
-    pool: &PgPool,
+    api_base_url: &str,
     client_id: i64,
     user_id: UserId,
     default_locale: &str,
 ) -> String {
-    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    let locale = resolve_user_locale(api_base_url, client_id, user_id, default_locale).await;
     help_message(&locale)
 }
 
@@ -73,12 +72,12 @@ pub fn name_prompt(locale: &str) -> String {
 }
 
 pub async fn name_prompt_for_user(
-    pool: &PgPool,
+    api_base_url: &str,
     client_id: i64,
     user_id: UserId,
     default_locale: &str,
 ) -> String {
-    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    let locale = resolve_user_locale(api_base_url, client_id, user_id, default_locale).await;
     name_prompt(&locale)
 }
 
@@ -87,12 +86,12 @@ pub fn phone_prompt(locale: &str) -> String {
 }
 
 pub async fn phone_prompt_for_user(
-    pool: &PgPool,
+    api_base_url: &str,
     client_id: i64,
     user_id: UserId,
     default_locale: &str,
 ) -> String {
-    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    let locale = resolve_user_locale(api_base_url, client_id, user_id, default_locale).await;
     phone_prompt(&locale)
 }
 
@@ -101,12 +100,12 @@ pub fn back_button_label(locale: &str) -> String {
 }
 
 pub async fn back_button_label_for_user(
-    pool: &PgPool,
+    api_base_url: &str,
     client_id: i64,
     user_id: UserId,
     default_locale: &str,
 ) -> String {
-    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    let locale = resolve_user_locale(api_base_url, client_id, user_id, default_locale).await;
     back_button_label(&locale)
 }
 

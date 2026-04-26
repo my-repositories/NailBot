@@ -1,4 +1,3 @@
-use sqlx::PgPool;
 use std::{collections::HashMap, sync::Arc};
 use teloxide::{
     Bot,
@@ -12,7 +11,6 @@ use crate::bot::states::SessionStore;
 
 pub mod handlers;
 pub mod keyboards;
-pub mod reminders;
 pub mod states;
 
 pub fn build_bot(token: &str) -> Bot {
@@ -30,10 +28,10 @@ enum Command {
     Appointment,
 }
 
-pub async fn run_polling(bot: Bot, pool: PgPool, default_locale: String, client_id: i64) {
+pub async fn run_polling(bot: Bot, api_base_url: String, default_locale: String, client_id: i64) {
     let sessions: Arc<SessionStore> = Arc::new(tokio::sync::RwLock::new(HashMap::new()));
     teloxide::repl(bot, move |bot: Bot, msg: Message| {
-        let pool = pool.clone();
+        let api_base_url = api_base_url.clone();
         let default_locale = default_locale.clone();
         let sessions = sessions.clone();
         async move {
@@ -47,14 +45,18 @@ pub async fn run_polling(bot: Bot, pool: PgPool, default_locale: String, client_
                     match cmd {
                         Command::Start => {
                             let message = handlers::user::start_message_for_user(
-                                &pool,
+                                &api_base_url,
                                 client_id,
                                 user_id,
                                 &default_locale,
                             )
                             .await;
-                            let locale =
-                                handlers::resolve_user_locale(&pool, client_id, user_id, &default_locale)
+                            let locale = handlers::resolve_user_locale(
+                                &api_base_url,
+                                client_id,
+                                user_id,
+                                &default_locale,
+                            )
                                     .await;
                             bot.send_message(msg.chat.id, message)
                                 .reply_markup(keyboards::main_menu(&locale))
@@ -62,7 +64,7 @@ pub async fn run_polling(bot: Bot, pool: PgPool, default_locale: String, client_
                         }
                         Command::Help => {
                             let message = handlers::user::help_message_for_user(
-                                &pool,
+                                &api_base_url,
                                 client_id,
                                 user_id,
                                 &default_locale,
@@ -73,7 +75,7 @@ pub async fn run_polling(bot: Bot, pool: PgPool, default_locale: String, client_
                         Command::Appointment => {
                             handlers::user::start_booking(&sessions, client_id, user_id).await;
                             let prompt = handlers::user::name_prompt_for_user(
-                                &pool,
+                                &api_base_url,
                                 client_id,
                                 user_id,
                                 &default_locale,

@@ -1,5 +1,4 @@
-use nailbot::api::database::init_db;
-use nailbot::bot::{build_bot, reminders::start_reminder_service, run_polling};
+use nailbot::bot::{build_bot, run_polling};
 use nailbot::shared::config::{Mode, Settings};
 use tracing::{info, warn};
 use tracing_subscriber::EnvFilter;
@@ -21,12 +20,16 @@ async fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    let pool = init_db(&settings.database_url).await?;
     let bot = build_bot(&settings.bot_token);
     info!("Bot service started");
 
     let client_id = if matches!(settings.mode, Mode::OnPrem) { 1 } else { 0 };
-    start_reminder_service(bot.clone(), pool.clone());
-    run_polling(bot, pool, settings.default_locale.clone(), client_id).await;
+    run_polling(
+        bot,
+        settings.api_base_url.clone(),
+        settings.default_locale.clone(),
+        client_id,
+    )
+    .await;
     Ok(())
 }

@@ -53,6 +53,11 @@ pub struct TodayAppointmentsQuery {
     pub client_id: i64,
 }
 
+#[derive(Debug, Serialize)]
+pub struct UserLocaleResponse {
+    pub locale: String,
+}
+
 pub fn router(pool: PgPool) -> Router {
     let state = ApiState { pool };
     Router::new()
@@ -60,6 +65,7 @@ pub fn router(pool: PgPool) -> Router {
         .route("/availability", get(availability))
         .route("/appointments", post(create_appointment).get(list_appointments))
         .route("/appointments/:id", delete(cancel_appointment))
+        .route("/users/:telegram_id/locale", get(user_locale))
         .route("/admin/appointments/today", get(today_appointments))
         .with_state(state)
 }
@@ -144,6 +150,18 @@ async fn today_appointments(
     .await
     .map_err(internal_error)?;
     Ok(Json(appointments))
+}
+
+async fn user_locale(
+    State(state): State<ApiState>,
+    Path(telegram_id): Path<i64>,
+    Query(query): Query<TodayAppointmentsQuery>,
+) -> Result<Json<UserLocaleResponse>, (StatusCode, Json<ErrorResponse>)> {
+    let locale = queries::get_user_locale(&state.pool, query.client_id, telegram_id)
+        .await
+        .map_err(internal_error)?
+        .unwrap_or_else(|| "en".to_string());
+    Ok(Json(UserLocaleResponse { locale }))
 }
 
 fn bad_request(err: impl std::fmt::Display) -> (StatusCode, Json<ErrorResponse>) {
