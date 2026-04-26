@@ -33,6 +33,7 @@ async fn main() -> anyhow::Result<()> {
         client_id = tenant_context.client_id,
         "NailBot started"
     );
+    println!("NailBot started");
 
     let pool = init_db(&settings.database_url).await?;
     if !settings.bot_token.is_empty() {
