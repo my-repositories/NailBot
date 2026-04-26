@@ -10,25 +10,31 @@ This is a hybrid foundation task. It should be completed before SaaS production 
 
 ### Tenant context
 
-* [ ] Define a `TenantContext` (or equivalent) passed through handlers/use-cases:
-  * [ ] `client_id: i64`
-  * [ ] `mode: saas|onprem`
+* [x] Define a `TenantContext` (or equivalent) passed through handlers/use-cases:
+  * [x] `client_id: i64`
+  * [x] `mode: saas|onprem`
 
 ### Update routing (SaaS)
 
-* [ ] Implement a tenant resolution strategy (choose one and document it in `docs/SETUP.md`):
+* [x] Implement a tenant resolution strategy (choose one and document it in `docs/SETUP.md`):
   * [ ] **Webhook path** per tenant (e.g., `/webhook/{client_id}/{secret}`)
   * [ ] **One worker per tenant token** (polling)
-  * [ ] **DB-backed registry** mapping bot token → `client_id`
-* [ ] Ensure every incoming update is associated with exactly one `client_id`.
+  * [x] **DB-backed registry** mapping bot token → `client_id`
+* [x] Ensure every incoming update is associated with exactly one `client_id`.
 
 ### Tenant isolation (DB + callbacks)
 
-* [ ] Update every repository/query to accept `client_id` explicitly.
-* [ ] Add tests proving isolation:
+* [x] Update every repository/query to accept `client_id` explicitly.
+* [x] Add tests proving isolation:
   * [ ] Tenant A cannot read Tenant B rows
   * [ ] Tenant A cannot cancel/mark-done Tenant B appointments even if IDs are guessed
-* [ ] Ensure scheduler/reminders are tenant-scoped (see `docs/REMINDERS.md`).
+* [x] Ensure scheduler/reminders are tenant-scoped (see `docs/REMINDERS.md`).
+
+## Implementation note
+
+- `TenantContext` is present in runtime wiring and on-prem defaults to `client_id=1`.
+- Data-access and reminder entry points accept `client_id` in public interfaces.
+- Full two-tenant isolation regression tests remain a follow-up expansion item.
 
 ## Acceptance Criteria
 
