@@ -1,5 +1,4 @@
 name: CI and GHCR Publish
-
 on:
   push:
     branches: ["main"]
@@ -18,17 +17,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+      - name: Setup Rust (Nightly)
+        uses: dtolnay/rust-toolchain@nightly 
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
       - name: Build
         run: cargo build --release --bin nailbot-api --bin nailbot-bot
+        env:
+          CARGO_UNSTABLE_EDITION2024: true
 
       - name: Test
         run: cargo test --all-targets
+        env:
+          CARGO_UNSTABLE_EDITION2024: true
 
   publish-images:
     runs-on: ubuntu-latest
@@ -80,6 +83,8 @@ jobs:
           push: true
           tags: ${{ steps.meta_api.outputs.tags }}
           labels: ${{ steps.meta_api.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and push bot image
         uses: docker/build-push-action@v6
@@ -90,3 +95,5 @@ jobs:
           push: true
           tags: ${{ steps.meta_bot.outputs.tags }}
           labels: ${{ steps.meta_bot.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
