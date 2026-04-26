@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: nailbot-db
+    environment:
+      POSTGRES_DB: nailbot
+      POSTGRES_USER: nailbot
+      POSTGRES_PASSWORD: nailbot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nailbot -d nailbot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      target: api
+    container_name: nailbot-api
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgres://nailbot:nailbot@db:5432/nailbot}
+      API_BIND: 0.0.0.0:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  bot:
+    build:
+      context: .
+      target: bot
+    container_name: nailbot-bot
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgres://nailbot:nailbot@db:5432/nailbot}
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+volumes:
+  postgres_data:

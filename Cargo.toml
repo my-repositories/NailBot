@@ -2,10 +2,15 @@
 name = "nailbot"
 version = "0.1.0"
 edition = "2021"
+autobins = false
 
 [[bin]]
-name = "nailbot"
-path = "src/main.rs"
+name = "nailbot-api"
+path = "src/bin/api.rs"
+
+[[bin]]
+name = "nailbot-bot"
+path = "src/bin/bot.rs"
 
 [dependencies]
 anyhow = "1"

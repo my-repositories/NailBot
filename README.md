@@ -52,15 +52,30 @@ Why this split:
 * 24‑hour reminders
 * Task recovery after restart
 
-## Run (Current Documentation Target)
+## Run
 
-Today this repository is documentation-first. Implementation is tracked by task docs.
+This project now runs as **two separate applications**:
 
-When implementation starts, expected local flow is:
+- `nailbot-api` - HTTP API service
+- `nailbot-bot` - Telegram worker service
 
-1. Clone: `git clone <url>`
-2. Create env file (mode-specific, including `DEFAULT_LOCALE` and license key for on-prem)
-3. Start API + bot (single process in dev or separate services)
+### Local run (PowerShell)
+
+1. `Copy-Item .env.onprem.example .env` (or use `.env.saas.example`)
+2. `./scripts/run-api.ps1`
+3. In another terminal: `./scripts/run-bot.ps1`
+
+### Local run (Bash/Shell)
+
+1. `cp .env.onprem.example .env` (or use `.env.saas.example`)
+2. `./scripts/run-api.sh`
+3. In another terminal: `./scripts/run-bot.sh`
+
+### Docker Compose
+
+1. Ensure `.env` exists
+2. `docker compose up -d --build`
+3. Check services: `docker compose ps`
 
 ## i18n Baseline (RU/EN)
 
