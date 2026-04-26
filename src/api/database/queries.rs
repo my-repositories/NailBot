@@ -71,3 +71,17 @@ pub async fn get_user_appointments(
     .fetch_all(pool)
     .await
 }
+
+pub async fn get_user_locale(
+    pool: &PgPool,
+    client_id: i64,
+    telegram_id: i64,
+) -> Result<Option<String>, sqlx::Error> {
+    sqlx::query_scalar::<_, String>(
+        "SELECT locale FROM users WHERE client_id = $1 AND telegram_id = $2 LIMIT 1",
+    )
+    .bind(client_id)
+    .bind(telegram_id)
+    .fetch_optional(pool)
+    .await
+}

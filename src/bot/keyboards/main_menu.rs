@@ -1,13 +1,15 @@
 use teloxide::types::{KeyboardButton, KeyboardMarkup};
 
-pub fn main_menu() -> KeyboardMarkup {
+use crate::shared::i18n::tr;
+
+pub fn main_menu(locale: &str) -> KeyboardMarkup {
     KeyboardMarkup::new(vec![
-        vec![KeyboardButton::new("🗓️ Book Appointment")],
+        vec![KeyboardButton::new(tr(locale, "menu-book-appointment"))],
         vec![
-            KeyboardButton::new("👤 My Appointments"),
-            KeyboardButton::new("💰 Prices"),
+            KeyboardButton::new(tr(locale, "menu-my-appointments")),
+            KeyboardButton::new(tr(locale, "menu-prices")),
         ],
-        vec![KeyboardButton::new("📸 Portfolio")],
+        vec![KeyboardButton::new(tr(locale, "menu-portfolio"))],
     ])
     .resize_keyboard()
 }

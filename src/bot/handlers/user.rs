@@ -1,17 +1,40 @@
 use chrono::{NaiveDate, NaiveTime, Utc};
 use regex::Regex;
+use sqlx::PgPool;
 use teloxide::types::UserId;
 use tracing::info;
 
 use crate::bot::states::{AppointmentState, SessionStore, UserSession};
+use crate::shared::i18n::tr;
 use crate::shared::models::AppointmentDraft;
+use super::resolve_user_locale;
 
-pub fn start_message() -> &'static str {
-    "👋 Welcome to NailBot! How can I help you?"
+pub fn start_message(locale: &str) -> String {
+    tr(locale, "start-message")
 }
 
-pub fn help_message() -> &'static str {
-    "📚 Help:\n\n/start — Show main menu\n/help — Show this help\n/appointment — Book a new appointment\n\nUse the menu below to navigate:"
+pub fn help_message(locale: &str) -> String {
+    tr(locale, "help-message")
+}
+
+pub async fn start_message_for_user(
+    pool: &PgPool,
+    client_id: i64,
+    user_id: UserId,
+    default_locale: &str,
+) -> String {
+    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    start_message(&locale)
+}
+
+pub async fn help_message_for_user(
+    pool: &PgPool,
+    client_id: i64,
+    user_id: UserId,
+    default_locale: &str,
+) -> String {
+    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    help_message(&locale)
 }
 
 pub async fn start_booking(sessions: &SessionStore, client_id: i64, user_id: UserId) {
@@ -45,16 +68,46 @@ pub fn validate_name(name: &str) -> bool {
     !trimmed.is_empty() && trimmed.len() <= 50
 }
 
-pub fn name_prompt() -> &'static str {
-    "Please enter your full name:"
+pub fn name_prompt(locale: &str) -> String {
+    tr(locale, "name-prompt")
 }
 
-pub fn phone_prompt() -> &'static str {
-    "Please enter your phone number:"
+pub async fn name_prompt_for_user(
+    pool: &PgPool,
+    client_id: i64,
+    user_id: UserId,
+    default_locale: &str,
+) -> String {
+    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    name_prompt(&locale)
 }
 
-pub fn back_button_label() -> &'static str {
-    "🔙 Back"
+pub fn phone_prompt(locale: &str) -> String {
+    tr(locale, "phone-prompt")
+}
+
+pub async fn phone_prompt_for_user(
+    pool: &PgPool,
+    client_id: i64,
+    user_id: UserId,
+    default_locale: &str,
+) -> String {
+    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    phone_prompt(&locale)
+}
+
+pub fn back_button_label(locale: &str) -> String {
+    tr(locale, "back-button")
+}
+
+pub async fn back_button_label_for_user(
+    pool: &PgPool,
+    client_id: i64,
+    user_id: UserId,
+    default_locale: &str,
+) -> String {
+    let locale = resolve_user_locale(pool, client_id, user_id, default_locale).await;
+    back_button_label(&locale)
 }
 
 pub fn validate_phone(phone: &str) -> bool {

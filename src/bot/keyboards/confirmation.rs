@@ -1,9 +1,20 @@
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 
-pub fn confirmation_keyboard() -> InlineKeyboardMarkup {
+use crate::shared::i18n::tr;
+
+pub fn confirmation_keyboard(locale: &str) -> InlineKeyboardMarkup {
     InlineKeyboardMarkup::new(vec![
-        vec![InlineKeyboardButton::callback("✅ Confirm", "confirm_appointment")],
-        vec![InlineKeyboardButton::callback("❌ Cancel", "cancel_appointment")],
-        vec![InlineKeyboardButton::callback("🔙 Back to Edit", "back_to_edit")],
+        vec![InlineKeyboardButton::callback(
+            tr(locale, "confirm-button"),
+            "confirm_appointment",
+        )],
+        vec![InlineKeyboardButton::callback(
+            tr(locale, "cancel-button"),
+            "cancel_appointment",
+        )],
+        vec![InlineKeyboardButton::callback(
+            tr(locale, "back-to-edit-button"),
+            "back_to_edit",
+        )],
     ])
 }

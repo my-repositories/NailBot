@@ -1,10 +1,13 @@
 use chrono::{Duration, NaiveDateTime, Utc};
 use sqlx::PgPool;
+use std::collections::HashMap;
 use teloxide::payloads::SendMessageSetters;
 use teloxide::{Bot, requests::Requester};
 use tracing::{error, info};
 
+use crate::api::database::queries;
 use crate::bot::keyboards::reminder_keyboard;
+use crate::shared::i18n::{normalize_locale, tr_with_args};
 use crate::shared::models::Appointment;
 
 pub fn start_reminder_service(bot: Bot, pool: PgPool) {
@@ -28,6 +31,10 @@ pub async fn check_and_send_reminders(bot: &Bot, pool: &PgPool) -> Result<(), sq
     .await?;
 
     let now = Utc::now().naive_utc();
+    let default_locale = normalize_locale(
+        &std::env::var("DEFAULT_LOCALE").unwrap_or_else(|_| "en".to_string()),
+    )
+    .to_string();
     for appt in appointments {
         let dt = NaiveDateTime::new(appt.appointment_date, appt.appointment_time);
         let diff = dt - now;
@@ -38,10 +45,16 @@ pub async fn check_and_send_reminders(bot: &Bot, pool: &PgPool) -> Result<(), sq
             continue;
         }
         let reminder_type = if is_24h { "24h" } else { "1h" };
-        let msg = format_reminder_message(&appt);
+        let locale = queries::get_user_locale(pool, appt.client_id, appt.user_id)
+            .await
+            .ok()
+            .flatten()
+            .map(|value| normalize_locale(&value).to_string())
+            .unwrap_or_else(|| default_locale.clone());
+        let msg = format_reminder_message(&appt, &locale);
         let _ = bot
             .send_message(teloxide::types::ChatId(appt.user_id), msg)
-            .reply_markup(reminder_keyboard())
+            .reply_markup(reminder_keyboard(&locale))
             .await;
         info!(
             "Reminder sent: Appointment ID {}, User ID {}, Type: {}",
@@ -51,11 +64,10 @@ pub async fn check_and_send_reminders(bot: &Bot, pool: &PgPool) -> Result<(), sq
     Ok(())
 }
 
-pub fn format_reminder_message(appointment: &Appointment) -> String {
-    format!(
-        "⏰ Reminder: Upcoming appointment\n\n🗓️ Date: {}\n⏰ Time: {}\n👤 Service: {}\n\nTo cancel or reschedule, use /appointment",
-        appointment.appointment_date,
-        appointment.appointment_time.format("%H:%M"),
-        appointment.service_type
-    )
+pub fn format_reminder_message(appointment: &Appointment, locale: &str) -> String {
+    let mut args = HashMap::new();
+    args.insert("date", appointment.appointment_date.to_string());
+    args.insert("time", appointment.appointment_time.format("%H:%M").to_string());
+    args.insert("service_type", appointment.service_type.clone());
+    tr_with_args(locale, "reminder-message", &args)
 }
