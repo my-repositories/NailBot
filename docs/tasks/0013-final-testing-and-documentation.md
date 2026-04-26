@@ -8,6 +8,13 @@ Ensure the entire booking flow is stable, bug‑free, and well‑documented for 
 ## Context
 Thirteenth and final task in the MVP phase (`ROADMAP.md`). Follows error handling implementation. Completes the MVP by validating all functionality and preparing user‑facing materials.
 
+## API/Bot Split Alignment
+* [ ] Test matrix must include API-only tests and bot->API integration tests.
+* [ ] Documentation must describe both runtime options:
+  * [ ] single-process dev topology
+  * [ ] split API and bot services
+* [ ] Acceptance sign-off requires parity between Telegram flow and API contracts planned for web/mobile clients.
+
 
 ## Requirements
 * [ ] Write integration tests for the full booking flow

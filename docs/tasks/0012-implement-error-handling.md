@@ -7,6 +7,13 @@ Ensure the bot remains operational and provides meaningful feedback during error
 ## Context
 Twelfth task in the MVP phase (`ROADMAP.md`). Follows admin panel implementation. Critical for production readiness — prevents crashes and improves user experience during transient failures.
 
+## API/Bot Split Alignment
+* [ ] Define separate but compatible error contracts:
+  * [ ] API: structured error responses
+  * [ ] Bot: user-friendly message mapping
+* [ ] Retry/backoff policy should be documented for both API internal operations and bot->API calls.
+* [ ] Include correlation identifiers in logs to trace a request across bot and API services.
+
 ## Requirements
 * [ ] Implement centralized error types in `src/error.rs`
 * [ ] Add retry logic for transient failures (DB, Telegram API)

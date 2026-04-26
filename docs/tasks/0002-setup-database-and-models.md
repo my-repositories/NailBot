@@ -6,6 +6,11 @@ Set up an SQLite database, create migrations, and implement Rust models for data
 ## Context
 Second task in the MVP phase (`ROADMAP.md`). Follows project initialization. Forms the foundation for all subsequent features that work with data.
 
+## API/Bot Split Alignment
+* [ ] DB access belongs to API/infrastructure layers only.
+* [ ] Bot handlers must consume DB-backed behavior through API contracts, not direct queries.
+* [ ] Models/repositories should be documented as backend concerns reusable by Telegram, web, and mobile clients.
+
 
 ## Requirements
 * [ ] Create the `migrations/` folder.

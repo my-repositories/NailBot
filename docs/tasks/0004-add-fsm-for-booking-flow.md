@@ -6,6 +6,11 @@ Implement a finite‑state machine (FSM) to manage conversation states during th
 ## Context
 Fourth task in the MVP phase (`ROADMAP.md`). Follows the implementation of basic handlers. Enables guiding the user through a multi‑step booking process.
 
+## API/Bot Split Alignment
+* [ ] FSM remains in bot adapter as conversation-state orchestration.
+* [ ] FSM transitions that require business decisions (availability, conflicts, policy checks) must rely on API responses.
+* [ ] Session state stores UI flow data; canonical booking validation remains in API/application layer.
+
 ## Requirements
 * [ ] Define an enum `AppointmentState` with all states from `docs/FSM_GUIDE.md`.
 * [ ] Implement state transitions: `Idle` → `SelectingDate` → `SelectingTime` → `InputtingName` → `InputtingPhone` → `Confirming`.

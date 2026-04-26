@@ -6,6 +6,11 @@ Create a time slot selection interface that allows users to choose a free time s
 ## Context
 Sixth task in the MVP phase (`ROADMAP.md`). Follows calendar keyboard implementation. Enables users to complete the date‑and‑time selection step in the booking flow.
 
+## API/Bot Split Alignment
+* [ ] Time slot availability is sourced from API endpoints, not direct bot DB queries.
+* [ ] Bot is responsible only for displaying slots and capturing selection callbacks.
+* [ ] Conflict checks and final slot validation are backend/API responsibilities.
+
 ## Requirements
 * [ ] Create a time slots keyboard module in `src/keyboards/time_slots.rs`
 * [ ] Implement function `time_slots_keyboard(date: &str)` that generates buttons for free slots

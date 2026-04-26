@@ -6,6 +6,11 @@ Enable users to view, manage, and modify their existing appointments through the
 ## Context
 Tenth task in the MVP phase (`ROADMAP.md`). Follows reminder implementation. Provides users with visibility into their booking history and control over their appointments.
 
+## API/Bot Split Alignment
+* [ ] Listing/cancel/reschedule operations are API use-cases; bot is a UI client.
+* [ ] Bot callbacks carry identifiers, but API performs authorization/tenant ownership checks.
+* [ ] Pagination/filter rules are defined in API contract and reused by future web/mobile clients.
+
 
 ## Requirements
 * [ ] Implement handler for `/myappointments` command in `src/handlers/user.rs`

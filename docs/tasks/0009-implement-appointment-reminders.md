@@ -7,6 +7,11 @@ Implement automated reminders sent to users 24 hours and 1 hour before their
 ## Context
 Ninth task in the MVP phase (`ROADMAP.md`). Follows appointment confirmation. Reduces no‑shows by proactively reminding users of their upcoming appointments.
 
+## API/Bot Split Alignment
+* [ ] Reminder eligibility/scans should be orchestrated by backend scheduler/API service.
+* [ ] Bot adapter is responsible for message delivery and callback transport.
+* [ ] In split deployments, reminder job ownership must avoid duplicate sends across workers.
+
 
 ## Requirements
 * [ ] Create a background job that checks for upcoming appointments

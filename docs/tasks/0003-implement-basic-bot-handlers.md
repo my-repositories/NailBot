@@ -7,6 +7,11 @@ Implement basic bot commands: `/start`, `/help`, and the main menu with a keyboa
 ## Context
 Third task in the MVP phase (`ROADMAP.md`). Follows the database setup. Enables basic user interaction with the bot.
 
+## API/Bot Split Alignment
+* [ ] Treat this task as Telegram transport/UI only.
+* [ ] `/start` and `/help` handlers should call API-backed use-cases where business data is needed.
+* [ ] No business rules or DB logic are implemented directly in bot handlers.
+
 ## Requirements
 * [ ] Implement a handler for the `/start` command in `src/handlers/user.rs`.
 * [ ] Implement a handler for the `/help` command in `src/handlers/user.rs`.

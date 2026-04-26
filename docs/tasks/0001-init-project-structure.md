@@ -6,6 +6,13 @@ Create the basic project structure and set up the development environment for fu
 ## Context
 First task in the MVP phase (`ROADMAP.md`). Required before starting any functionality implementation.
 
+## API/Bot Split Alignment
+* [ ] Define initial structure for separated services:
+  * [ ] `src/api/` (HTTP surface)
+  * [ ] `src/application/` and `src/domain/` (business rules)
+  * [ ] `src/bot/` (Telegram adapter only)
+* [ ] Keep all new documentation/examples aligned with `docs/tasks/0000-separate-api-service-and-bot-handler.md`.
+
 ## Requirements
 * [ ] Create folder structure: `src/`, `migrations/`, `docs/`.
 * [ ] Initialize a Cargo project: `cargo init`.

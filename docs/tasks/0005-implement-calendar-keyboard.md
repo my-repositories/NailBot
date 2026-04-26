@@ -6,6 +6,11 @@ Create an interactive calendar keyboard that allows users to select a date for t
 ## Context
 Fifth task in the MVP phase (`ROADMAP.md`). Follows FSM implementation. Enables users to visually select a date during the booking flow (`SelectingDate` state). Uses the modular keyboard system (`src/keyboards/`).
 
+## API/Bot Split Alignment
+* [ ] Calendar rendering is a bot/UI concern.
+* [ ] Allowed date range and booking constraints are provided by API/business rules.
+* [ ] Callback payloads must be validated in bot and re-validated by API before applying decisions.
+
 ## Requirements
 * [ ] Create a calendar keyboard module in `src/keyboards/calendar.rs`
 * [ ] Implement function `calendar_keyboard(year: i32, month: u32)` that generates a monthly grid

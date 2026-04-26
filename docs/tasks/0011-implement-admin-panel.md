@@ -7,6 +7,11 @@ Create an administrative interface for staff to monitor appointments, receive no
 ## Context
 Ele11th task in the MVP phase (`ROADMAP.md`). Follows user appointment management. Enables salon staff to oversee bookings and respond to new appointments.
 
+## API/Bot Split Alignment
+* [ ] Admin data and mutations (stats, mark-done, today list) are served by API endpoints.
+* [ ] Bot admin commands are transport adapters over API operations.
+* [ ] Tenant-scoped admin authorization is enforced in API, not only in bot command guards.
+
 
 ## Requirements
 * [ ] Implement admin‑only commands: `/admin`, `/stats`

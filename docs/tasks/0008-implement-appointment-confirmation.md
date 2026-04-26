@@ -6,6 +6,11 @@ Enable the user to review and confirm their appointment details before finalizin
 ## Context
 Eighth task in the MVP phase (`ROADMAP.md`). Follows user data collection. Completes the core booking flow by allowing users to verify their choices and commit to the appointment.
 
+## API/Bot Split Alignment
+* [ ] Bot renders confirmation summary and receives user decision.
+* [ ] Appointment creation/commit is executed by API endpoint(s), not by bot-side repository calls.
+* [ ] API is source of truth for idempotency, conflict handling, and persistence transactions.
+
 ## Requirements
 * [ ] Implement handler for `Confirming` state in `src/handlers/user.rs`
 * [ ] Display a summary of the appointment: date, time, name, phone

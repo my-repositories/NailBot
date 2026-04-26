@@ -7,6 +7,11 @@ Enable the bot to collect user data (name, phone number) during the booking proc
 ## Context
 Seventh task in the MVP phase (`ROADMAP.md`). Follows time slot selection implementation. Allows the bot to gather necessary contact information before confirmation.
 
+## API/Bot Split Alignment
+* [ ] Bot handles input capture UX and basic pre-validation only.
+* [ ] Canonical validation rules (name/phone policy) are enforced in API/application layer.
+* [ ] Sensitive data handling/redaction policy must be shared across bot and API logs.
+
 ## Requirements
 * [ ] Implement handler for `InputtingName` state in `src/handlers/user.rs`
 * [ ] Prompt user to enter their full name
