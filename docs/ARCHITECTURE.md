@@ -49,7 +49,7 @@ The key architectural goal is **modularity**: keep booking/admin logic stable wh
 **Responsibility**: persistence and queries behind a narrow interface used by the core.
 
 - **Port (interface)**: repository traits like `UsersRepo`, `AppointmentsRepo`, `SlotsRepo`.
-- **Adapters**: `sqlite`, `postgres` implementations; migrations; connection pooling; transaction boundaries.
+- **Adapters**: `postgres` implementations; migrations; connection pooling; transaction boundaries.
 - **Multi-tenancy**: enforce `client_id` scoping at the adapter boundary (or via row-level policy in Postgres).
 
 ### Configuration Layer (runtime wiring)
@@ -93,6 +93,6 @@ The separation work is tracked in:
 
 - **Telegram API**: `teloxide`
 - **Async runtime**: `tokio`
-- **DB**: `rusqlite` (SQLite) and/or `sqlx`/`tokio-postgres` (Postgres) depending on adapter choice
+- **DB**: `sqlx`/`tokio-postgres` (PostgreSQL)
 - **Date/time**: `chrono` / `time`
 - **Config**: `dotenvy` + typed validation (`config`, `serde`, or custom parsing)

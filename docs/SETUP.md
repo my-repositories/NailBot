@@ -13,9 +13,7 @@ Service topology target:
 ## Prerequisites
 
 - Rust toolchain (MSRV as defined by the repo; typically 1.70+ for modern async stacks)
-- A database:
-  - SQLite (simple, good for on‑prem and small installs)
-  - PostgreSQL (recommended for SaaS production)
+- PostgreSQL 15+ (single required runtime database for all modes)
 - Telegram bot token(s) from @BotFather
 
 ## Environment Strategy
@@ -25,7 +23,7 @@ All configuration is grouped into three layers of environment variables.
 ### 1) Global (applies to both SaaS and On‑Prem)
 
 - `MODE`: `saas` or `onprem`
-- `DATABASE_URL`: e.g. `sqlite:///app/data/bot.db` or `postgres://user:pass@db:5432/nailbot`
+- `DATABASE_URL`: `postgres://user:pass@db:5432/nailbot`
 - `LOG_LEVEL`: e.g. `info`, `debug`
 - `TZ`: e.g. `Europe/Moscow`
 - `API_BASE_URL`: base URL for clients (bot/web/mobile) to reach Web API
@@ -69,7 +67,7 @@ cd NailBot
 cp .env.onprem.example .env
 ```
 
-3. Edit `.env` (at minimum set `MODE=onprem`, `BOT_TOKEN`, `ADMIN_IDS`, and `DATABASE_URL`).
+3. Edit `.env` (at minimum set `MODE=onprem`, `BOT_TOKEN`, `ADMIN_IDS`, `DATABASE_URL`, `DEFAULT_LOCALE`, and `LICENSE_KEY`).
 
 4. Run strategy (documentation target):
 
@@ -82,6 +80,17 @@ cp .env.onprem.example .env
 cargo build
 cargo run
 ```
+
+## Localization baseline (RU/EN)
+
+- Translation engine: `fluent` + `fluent-bundle`.
+- Locale IDs and fallback: `unic-langid`.
+- Catalog files are shared across channels:
+  - `locales/en.ftl`
+  - `locales/ru.ftl`
+- SaaS locale resolution: user locale is loaded from tenant-scoped DB data per request/session.
+- On-Prem locale resolution: default from `.env` (`DEFAULT_LOCALE`) with optional per-user override.
+- Bot/API rule: business logic stays language-neutral; adapters render localized text by key.
 
 ## SaaS Mode Setup (Conceptual)
 

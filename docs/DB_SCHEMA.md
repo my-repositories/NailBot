@@ -86,7 +86,8 @@ In on‑prem you may keep a single row (`id=1`) or omit this table entirely if y
 - Store migrations in `migrations/` (e.g., `migrations/001_init.sql`).
 - Apply automatically on startup or via a dedicated migration command in CI/CD.
 
-## SQL Notes (SQLite vs Postgres)
+## SQL Notes (PostgreSQL standard)
 
-- SQLite lacks some advanced constraints; keep **tenant scoping** enforced in queries and repository methods.
-- Postgres can enforce stronger invariants (composite keys, row-level security); consider it for SaaS scale.
+- PostgreSQL is the canonical and required backend in both SaaS and On-Prem modes.
+- Enforce tenant scoping with explicit `client_id` predicates in every repository/query method.
+- Prefer strong DB guarantees where possible (composite constraints, transactional checks, optional RLS).

@@ -3,7 +3,7 @@
 This repository supports a **hybrid distribution model**:
 
 - **SaaS (Multi-tenant)**: you operate one hosted platform instance.
-- **On‑Prem (Single-tenant)**: a customer runs one instance, typically with SQLite or their own Postgres, and must provide a valid license key.
+- **On‑Prem (Single-tenant)**: a customer runs one instance with PostgreSQL and must provide a valid license key.
 
 The deployment workflow below uses **Docker + Compose** so both distributions share the same runtime story.
 
@@ -11,15 +11,13 @@ The deployment workflow below uses **Docker + Compose** so both distributions sh
 
 - Docker Engine + Docker Compose v2
 - Telegram bot token(s)
-- A database:
-  - SQLite (on‑prem friendly; mounted volume)
-  - PostgreSQL (recommended for SaaS production)
+- PostgreSQL 15+
 
 ## Container Images (Target Layout)
 
 - `api` container: HTTP API service with domain logic and DB access.
 - `bot` container: Telegram adapter calling `api` endpoints.
-- `db` container (optional): Postgres for SaaS or on-prem deployments that choose Postgres.
+- `db` container: PostgreSQL for SaaS and On‑Prem.
 
 ## Environment Files
 
@@ -43,7 +41,7 @@ cp .env.onprem.example .env
 - `MODE=onprem`
 - `BOT_TOKEN=...`
 - `ADMIN_IDS=...`
-- `DATABASE_URL=sqlite:///app/data/bot.db`
+- `DATABASE_URL=postgres://nailbot:nailbot@db:5432/nailbot`
 - `LICENSE_KEY=...`
 
 3. Start:
@@ -120,6 +118,12 @@ If you choose to bind a license to an installation, fingerprint from stable inpu
 - Assume the customer can patch binaries (on‑prem threat model). Licensing reduces casual redistribution; it does not prevent a determined reverse engineer.
 - Never log full tokens/keys. Redact or hash.
 
+## Localization deployment notes (RU/EN)
+
+- Ship `locales/en.ftl` and `locales/ru.ftl` with both API and bot images.
+- Keep locale selection in runtime config and tenant/user profile, never in code branches.
+- Validate that API and bot containers run the same translation catalogs and key versions.
+
 ## Tenant isolation note (SaaS)
 
 SaaS deployments must ensure **every request and background job** is executed with a resolved `client_id` and uses tenant-scoped queries. See `docs/tasks/0014-hybrid-tenant-isolation-and-routing.md`.
@@ -131,9 +135,7 @@ In split deployments, this applies to both:
 
 ## Operational Notes
 
-- **SQLite**: run a single app instance (single writer). For multi-worker scale, use Postgres.
 - **Backups**:
-  - SQLite: back up the DB file volume.
   - Postgres: use `pg_dump` or physical backups.
 
 ## Troubleshooting

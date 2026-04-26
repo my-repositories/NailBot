@@ -27,7 +27,7 @@ Why this split:
 * **Language:** Rust (1.65+)
 * **Framework:** teloxide
 * **Async Runtime:** tokio
-* **Database:** SQLite
+* **Database:** PostgreSQL
 * **Date/Time:** chrono
 * **Configuration:** dotenvy
 * **Logging:** tracing
@@ -59,8 +59,16 @@ Today this repository is documentation-first. Implementation is tracked by task 
 When implementation starts, expected local flow is:
 
 1. Clone: `git clone <url>`
-2. Create env file (mode-specific)
+2. Create env file (mode-specific, including `DEFAULT_LOCALE` and license key for on-prem)
 3. Start API + bot (single process in dev or separate services)
+
+## i18n Baseline (RU/EN)
+
+- Runtime localization is based on `fluent` + `fluent-bundle`.
+- Locale identifiers and fallback use `unic-langid`.
+- Catalogs are externalized in `locales/en.ftl` and `locales/ru.ftl`.
+- SaaS resolves locale per user (tenant-scoped).
+- On‑Prem uses env default locale with optional per-user override.
 
 ## Structure
 
