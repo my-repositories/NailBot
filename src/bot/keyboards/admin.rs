@@ -1,4 +1,4 @@
-use crate::database::models::Appointment;
+use crate::api::database::models::Appointment;
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 
 pub fn admin_dashboard_keyboard() -> InlineKeyboardMarkup {

@@ -1,10 +1,13 @@
 use nailbot::{
+    api::run_api,
     bot::build_bot,
-    config::{Mode, Settings},
-    database::init_db,
-    reminders::start_reminder_service,
-    tenant::TenantContext,
+    bot::reminders::start_reminder_service,
+    shared::{
+        config::{Mode, Settings},
+        tenant::TenantContext,
+    },
 };
+use nailbot::api::database::init_db;
 use tracing::info;
 use tracing_subscriber::EnvFilter;
 
@@ -36,6 +39,15 @@ async fn main() -> anyhow::Result<()> {
     println!("NailBot started");
 
     let pool = init_db(&settings.database_url).await?;
+    let api_bind = std::env::var("API_BIND").unwrap_or_else(|_| "127.0.0.1:8080".to_string());
+    let bind_addr: std::net::SocketAddr = api_bind.parse()?;
+    let api_pool = pool.clone();
+    tokio::spawn(async move {
+        if let Err(err) = run_api(api_pool, bind_addr).await {
+            tracing::error!("api server failed: {err}");
+        }
+    });
+
     if !settings.bot_token.is_empty() {
         let bot = build_bot(&settings.bot_token);
         start_reminder_service(bot, pool);

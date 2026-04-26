@@ -1,4 +1,4 @@
-use crate::config::Mode;
+use crate::shared::config::Mode;
 
 #[derive(Debug, Clone)]
 pub struct TenantContext {

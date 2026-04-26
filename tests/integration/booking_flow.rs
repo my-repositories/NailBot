@@ -1,4 +1,4 @@
-use nailbot::handlers::user::{redact_phone, validate_name, validate_phone};
+use nailbot::bot::handlers::user::{redact_phone, validate_name, validate_phone};
 
 #[test]
 fn test_name_validation() {

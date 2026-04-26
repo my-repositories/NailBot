@@ -4,8 +4,8 @@ use teloxide::payloads::SendMessageSetters;
 use teloxide::{Bot, requests::Requester};
 use tracing::{error, info};
 
-use crate::database::models::Appointment;
-use crate::keyboards::reminder_keyboard;
+use crate::api::database::models::Appointment;
+use crate::bot::keyboards::reminder_keyboard;
 
 pub fn start_reminder_service(bot: Bot, pool: PgPool) {
     tokio::spawn(async move {

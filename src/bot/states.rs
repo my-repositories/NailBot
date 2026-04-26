@@ -4,7 +4,7 @@ use chrono::{DateTime, Utc};
 use teloxide::types::UserId;
 use tokio::sync::RwLock;
 
-use crate::database::models::AppointmentDraft;
+use crate::api::database::models::AppointmentDraft;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AppointmentState {
